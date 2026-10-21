@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ModaNova - Tienda de Ropa</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222}
+header{background:#111827;color:#fff;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:15px;position:sticky;top:0;z-index:100;box-shadow:0 3px 15px rgba(0,0,0,.2)}
+.logo{font-size:27px;font-weight:bold;white-space:nowrap}
+.sb{flex:1;max-width:560px;position:relative}
+.sb form{display:flex}
+.sb input{flex:1;padding:11px 14px;border:none;border-radius:8px 0 0 8px;font-size:15px;min-width:0}
+.sb .lupa{border:none;background:#7c3aed;color:#fff;padding:0 18px;border-radius:0 8px 8px 0;cursor:pointer}
+.iw{position:relative;flex:1;display:flex;min-width:0}.sb input,#gh{font-family:inherit;font-size:15px;line-height:normal;letter-spacing:normal}
+#gh{position:absolute;left:14px;right:8px;top:0;bottom:0;display:flex;align-items:center;pointer-events:none;color:#a79fbd;white-space:pre;overflow:hidden}
+#sug b{font-weight:700}
+#sug{display:none;position:absolute;left:0;right:0;top:100%;background:#fff;color:#222;border-radius:0 0 10px 10px;box-shadow:0 8px 20px rgba(0,0,0,.25);overflow:hidden}
+#sug div{padding:11px 14px;cursor:pointer;display:flex;justify-content:space-between}
+#sug div:hover,#sug .on{background:#ede9fe}#sug small{color:#888}
+nav{display:flex;gap:10px;align-items:center}
+nav button{border:none;padding:10px 15px;border-radius:8px;cursor:pointer;background:transparent;color:#fff;font-size:15px}
+nav button:hover{background:#374151}.carrito-btn{background:#7c3aed!important}
+.hero{background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),url("https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80");background-size:cover;background-position:center;color:#fff;text-align:center;padding:100px 20px}
+.hero h1{font-size:60px;margin-bottom:15px}.hero p{font-size:22px}
+.hero button{margin-top:25px;padding:14px 25px;border:none;border-radius:8px;background:#fff;color:#7c3aed;font-weight:bold;cursor:pointer}
+main{max-width:1350px;margin:auto;padding:55px 20px}
+.titulo{text-align:center;margin-bottom:25px}.titulo h2{font-size:34px;margin-bottom:10px}.titulo p{color:#666}
+.demo{text-align:center;font-size:13px;color:#666;margin-bottom:25px}
+.demo button{border:1px dashed #7c3aed;background:none;color:#7c3aed;border-radius:16px;padding:5px 11px;margin:3px;cursor:pointer}
+.layout{display:grid;grid-template-columns:250px 1fr;gap:25px}
+aside{background:#fff;border-radius:16px;padding:18px;align-self:start;position:sticky;top:90px;box-shadow:0 5px 18px rgba(0,0,0,.08)}
+aside h4{margin:16px 0 8px;font-size:14px}aside h4:first-child{margin-top:0}
+aside label{display:flex;gap:8px;align-items:center;padding:4px 0;font-size:14px;cursor:pointer}
+.cat{display:flex;justify-content:space-between;width:100%;background:none;border:none;padding:7px 9px;border-radius:8px;cursor:pointer;font-size:14px;text-align:left}
+.cat:hover{background:#ede9fe}.cat.on{background:#7c3aed;color:#fff}.cat span{opacity:.7}
+.rango{display:flex;gap:6px}
+aside input[type=number],select{width:100%;padding:9px;border:1px solid #ccc;border-radius:8px;font-size:14px;background:#fff}
+.barra{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chip{background:#7c3aed;color:#fff;border:none;border-radius:20px;padding:6px 13px;font-size:13px;cursor:pointer;margin:2px}
+.chip.limpiar{background:none;color:#7c3aed;text-decoration:underline}
+.correccion{background:#fff7ed;color:#c2410c;border-radius:10px;padding:12px 15px;margin-bottom:14px;font-size:14px}
+.correccion a{color:#7c3aed;font-weight:bold;cursor:pointer}
+.productos{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:25px}
+.producto{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 5px 18px rgba(0,0,0,.08);transition:.25s;display:flex;flex-direction:column}
+.producto:hover{transform:translateY(-6px)}
+.imagen-producto{height:270px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:70px;background:#ede9fe;cursor:pointer}
+.imagen-producto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:.3s}
+.producto:hover img{transform:scale(1.06)}
+.oferta{position:absolute;top:10px;left:10px;z-index:2;background:#dc2626;color:#fff;font-size:12px;font-weight:bold;padding:4px 9px;border-radius:6px}
+.info-producto{padding:18px;display:flex;flex-direction:column;flex:1}
+.info-producto h3{margin-bottom:6px;cursor:pointer;font-size:16px}
+mark{background:#fde68a;border-radius:2px}
+.marca{font-size:12px;color:#777;margin-bottom:6px}
+.precio{color:#7c3aed;font-size:22px;font-weight:bold;margin-bottom:4px}.precio s{font-size:13px;color:#999;font-weight:normal;margin-left:5px}
+.origen{display:inline-block;padding:6px 10px;border-radius:20px;font-size:13px;font-weight:bold;margin:5px 0;align-self:flex-start}
+.importado{background:#dbeafe;color:#1d4ed8}.nacional{background:#dcfce7;color:#15803d}
+.entrega{font-size:12px;color:#2563eb;margin-top:4px}
+.stock{margin:10px 0;color:#555;font-size:14px}.stock-bajo{color:#d97706;font-weight:bold}.agotado{color:#dc2626;font-weight:bold}
+.agregar{width:100%;padding:13px;border:none;border-radius:8px;background:#7c3aed;color:#fff;font-weight:bold;cursor:pointer;margin-top:auto}
+.agregar:hover{background:#5b21b6}.agregar:disabled{background:#aaa;cursor:not-allowed}
+.valoracion{margin:10px 0;padding:10px;background:#fafafa;border-radius:10px}
+.estrellas{color:#f59e0b;font-size:18px;letter-spacing:2px}.promedio{color:#555;font-size:13px;margin-left:5px}
+.btn-resenas{width:100%;padding:10px;margin-top:10px;border:1px solid #7c3aed;background:#fff;color:#7c3aed;border-radius:8px;font-weight:bold;cursor:pointer}
+.btn-resenas:hover{background:#ede9fe}
+.paginas{display:flex;gap:6px;justify-content:center;margin-top:35px;flex-wrap:wrap}
+.paginas button{border:1px solid #ddd;background:#fff;padding:9px 14px;border-radius:8px;cursor:pointer}.paginas .on{background:#7c3aed;color:#fff;border-color:#7c3aed}
+.sin-res{background:#fff;border-radius:16px;padding:50px 25px;text-align:center;box-shadow:0 5px 18px rgba(0,0,0,.08)}
+.sin-res .big{font-size:60px}.sin-res h2{margin:10px 0}.sin-res p{color:#666}
+.sin-res ul{text-align:left;max-width:360px;margin:15px auto;color:#666;line-height:1.8}
+footer{text-align:center;padding:35px;background:#111827;color:#fff}
+.modal-fondo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);justify-content:center;align-items:center;z-index:500;padding:20px}
+.modal-fondo.activo{display:flex}
+.modal{background:#fff;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;border-radius:16px;padding:28px;position:relative}
+.cerrar{position:absolute;right:15px;top:10px;background:none;border:none;font-size:30px;cursor:pointer}
+.modal h2{margin-bottom:20px}
+.tabs{display:flex;gap:5px;background:#eee;padding:5px;border-radius:10px;margin-bottom:20px}
+.tabs button{flex:1;padding:11px;border:none;background:transparent;border-radius:8px;cursor:pointer}.tabs button.activo{background:#fff;font-weight:bold}
+.campo{margin-bottom:16px}.campo label{display:block;margin-bottom:7px;font-weight:bold}
+.campo input,.campo textarea{width:100%;padding:13px;border:1px solid #ccc;border-radius:8px;font-size:15px}
+.campo textarea{resize:vertical;min-height:100px}
+.btn-submit{width:100%;padding:14px;border:none;border-radius:8px;background:#7c3aed;color:#fff;font-weight:bold;cursor:pointer}
+.mensaje{min-height:20px;margin-bottom:12px}.error{color:#dc2626}.exito{color:#16a34a}
+.selector-estrellas{display:flex;gap:5px;margin:10px 0 20px}
+.selector-estrellas button{border:none;background:transparent;font-size:35px;color:#ccc;cursor:pointer;transition:.2s}
+.selector-estrellas button:hover,.selector-estrellas button.seleccionada{color:#f59e0b;transform:scale(1.1)}
+.resena{border:1px solid #e5e7eb;border-radius:12px;padding:15px;margin-bottom:12px;background:#fafafa}
+.resena-cabecera{display:flex;justify-content:space-between;gap:10px;margin-bottom:7px}
+.resena-usuario{font-weight:bold;color:#4c1d95}.resena-fecha{color:#888;font-size:12px}
+.resena-estrellas{color:#f59e0b;font-size:18px;margin-bottom:8px}.resena-texto{color:#444;line-height:1.5}
+.eliminar-resena{margin-top:10px;border:none;background:#fee2e2;color:#dc2626;padding:7px 10px;border-radius:6px;cursor:pointer}
+.sin-resenas,.vacio{text-align:center;color:#777;padding:25px}
+.cuenta{background:#ede9fe;padding:14px;border-radius:10px;margin-bottom:15px}
+.carrito-item{display:flex;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid #ddd}
+.carrito-icono{width:70px;height:70px;border-radius:10px;overflow:hidden;flex-shrink:0;background:#ede9fe;display:flex;align-items:center;justify-content:center;font-size:30px;position:relative}
+.carrito-icono img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.carrito-info{flex:1}.carrito-info strong{display:block;margin-bottom:4px}.carrito-info small{display:block;color:#777;margin-bottom:3px}
+.cantidad{display:flex;gap:8px;align-items:center;margin-top:8px}
+.cantidad button{width:28px;height:28px;border:none;border-radius:6px;background:#ddd;cursor:pointer}
+.eliminar{background:none;border:none;color:#dc2626;cursor:pointer;margin-top:7px}
+.resumen{margin-top:20px;padding-top:15px;border-top:2px solid #ddd}
+.linea{display:flex;justify-content:space-between;margin:10px 0;color:#555}.linea.envio{color:#2563eb}
+.linea.total{color:#111827;font-size:24px;font-weight:bold;padding-top:12px;border-top:1px solid #ddd}
+.envio-gratis{background:#dcfce7;color:#15803d;padding:10px;border-radius:8px;text-align:center;margin:12px 0;font-weight:bold}
+.aviso-envio{background:#fff7ed;color:#c2410c;padding:10px;border-radius:8px;margin:12px 0;font-size:14px}
+.comprar{width:100%;margin-top:16px;padding:14px;border:none;border-radius:8px;background:#16a34a;color:#fff;font-weight:bold;cursor:pointer}
+#fb{display:none;border:1px solid #7c3aed;background:#fff;color:#7c3aed;border-radius:8px;padding:9px 14px;cursor:pointer;font-weight:bold}
+@media(max-width:900px){.layout{grid-template-columns:1fr}aside{display:none;position:static}aside.on{display:block}#fb{display:inline-block}}
+@media(max-width:650px){header{flex-direction:column}nav{flex-wrap:wrap;justify-content:center}.sb{width:100%;max-width:none}.hero h1{font-size:42px}}
+</style></head><body>
+<header>
+<div class="logo">🛍️ ModaNova</div>
+<div class="sb"><form id="sf" autocomplete="off"><div class="iw"><input id="q" placeholder="Buscar playeras, jeans, marcas…" aria-label="Buscar" aria-autocomplete="list"><span id="gh" aria-hidden="true"></span></div><button class="lupa">🔍</button></form><div id="sug"></div></div>
+<nav><button onclick="irProductos()">Inicio</button><button id="cuentaBtn" onclick="abrirAuth()">Iniciar sesión</button>
+<button class="carrito-btn" onclick="abrirCarrito()">🛒 Carrito (<span id="cantidadCarrito">0</span>)</button></nav>
+</header>
+<section class="hero"><h1>ModaNova</h1><p>Descubre tu nuevo estilo</p><button onclick="irProductos()">Ver colección</button></section>
+<main id="productosSection">
+<div class="titulo"><h2>Nueva colección</h2><p>Prendas nacionales e importadas con envío a domicilio.</p></div>
+<div class="demo">Consultas del ejercicio:
+<button onclick="buscar('playera')">① Exacta: playera</button><button onclick="buscar('plyera')">② Con error: plyera</button><button onclick="buscar('xyzqw')">③ Sin resultados: xyzqw</button></div>
+<div class="layout"><aside id="as"></aside>
+<section><div class="barra"><div><button id="fb" onclick="document.getElementById('as').classList.toggle('on')">☰ Filtros</button> <strong id="cnt"></strong></div>
+<label>Ordenar: <select id="so" style="width:auto" onchange="S.sort=this.value;S.page=1;mostrarProductos()"><option value="rel">Relevancia</option><option value="pa">Precio: menor a mayor</option><option value="pd">Precio: mayor a menor</option><option value="rt">Mejor valorados</option><option value="of">Mayor descuento</option></select></label></div>
+<div id="corr"></div><div class="chips" id="chips"></div><div id="productos" class="productos"></div><div class="paginas" id="pag"></div></section></div>
+</main>
+<footer><p>© 2026 ModaNova - Tienda de ropa</p></footer>
+
+<div id="authModal" class="modal-fondo"><div class="modal"><button class="cerrar" onclick="cerrarModal('authModal')">×</button><h2>👤 Mi cuenta</h2>
+<div class="tabs"><button id="loginTab" class="activo" onclick="cambiarModo('login')">Iniciar sesión</button><button id="registroTab" onclick="cambiarModo('registro')">Crear cuenta</button></div>
+<form onsubmit="autenticar(event)"><div class="campo"><label>Usuario</label><input type="text" id="usuario" placeholder="Escribe tu usuario" minlength="3" required></div>
+<div class="campo"><label>Contraseña</label><input type="password" id="password" placeholder="Escribe tu contraseña" minlength="4" required></div>
+<div id="mensajeAuth" class="mensaje"></div><button id="btnAuth" class="btn-submit">Iniciar sesión</button></form></div></div>
+
+<div id="resenasModal" class="modal-fondo"><div class="modal"><button class="cerrar" onclick="cerrarModal('resenasModal')">×</button><h2 id="tituloResenas">⭐ Reseñas</h2>
+<div id="resumenEstrellas" class="valoracion"></div><div id="listaResenas"></div>
+<hr style="margin:25px 0;border:none;border-top:1px solid #ddd"><h3>✍️ Escribe una reseña</h3><br>
+<form onsubmit="guardarResena(event)"><label>Tu valoración:</label>
+<div id="selectorEstrellas" class="selector-estrellas"><button type="button" onclick="selEstrellas(1)">★</button><button type="button" onclick="selEstrellas(2)">★</button><button type="button" onclick="selEstrellas(3)">★</button><button type="button" onclick="selEstrellas(4)">★</button><button type="button" onclick="selEstrellas(5)">★</button></div>
+<div class="campo"><label>Comentario</label><textarea id="textoResena" maxlength="300" placeholder="Cuéntanos qué te pareció este producto..." required></textarea></div>
+<div id="mensajeResena" class="mensaje"></div><button class="btn-submit">Publicar reseña</button></form></div></div>
+
+<div id="carritoModal" class="modal-fondo"><div class="modal"><button class="cerrar" onclick="cerrarModal('carritoModal')">×</button><h2>🛒 Mi carrito</h2>
+<div id="cuentaInfo" class="cuenta"></div><div id="carritoItems"></div><div id="resumenCompra" class="resumen"></div>
+<button class="comprar" onclick="finalizarCompra()">Finalizar compra</button></div></div>
+
+<div id="detalleModal" class="modal-fondo"><div class="modal"><button class="cerrar" onclick="cerrarModal('detalleModal')">×</button><div id="detalle"></div></div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const N=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const U="https://images.unsplash.com/";
+/* ===== 12 prendas originales (base) ===== */
+const B=[
+["Playera Blanca","Playera",299,15,0,"photo-1523381210434-271e8be1f52b","Playeras y tops","👕"],
+["Sudadera Gris","Sudadera",649,8,1,"photo-1578681994506-b8f463449011","Sudaderas y hoodies","🧥"],
+["Jeans Azul","Jeans",799,10,0,"photo-1541099649105-f69ad21f3246","Pantalones y shorts","👖"],
+["Chaqueta Negra","Chaqueta",999,6,1,"photo-1551028719-00167b16eac5","Chaquetas y abrigos","🧥"],
+["Vestido Negro","Vestido",699,7,0,"photo-1566174053879-31528523f8ae","Vestidos y faldas","👗"],
+["Falda Negra","Falda",499,9,1,"photo-1583496661160-fb5886a13d27","Vestidos y faldas","👗"],
+["Pantalón Cargo Beige","Pantalón cargo",749,12,0,"photo-1515886657613-9f3515b0c78f","Pantalones y shorts","👖"],
+["Camisa Blanca","Camisa",599,11,1,"photo-1596755094514-f87e34085b2c","Playeras y tops","👔"],
+["Hoodie Negro","Hoodie",699,5,0,"photo-1556821840-3a63f95609a7","Sudaderas y hoodies","🧥"],
+["Top Deportivo","Top deportivo",349,14,1,"photo-1538805060514-97d9cc17730c","Playeras y tops","🩱"],
+["Short Deportivo","Short deportivo",399,13,0,"photo-1591195853828-11db59a44f6b","Pantalones y shorts","🩳"],
+["Abrigo Beige","Abrigo",1299,4,1,"photo-1539533113208-f5439d7c9a8f","Chaquetas y abrigos","🧥"]];
+const BR=["Nova","Urbano","Aztek","Lumen","Kappa","Orbe","Zenit","Brío"],CO=["negro","blanco","azul","gris","rojo","verde"],TA=["XS","S","M","L","XL"];
+const CATS=[...new Set(B.map(b=>b[6]))];
+let seed=11;const R=()=>(seed=seed*16807%2147483647)/2147483647;
+const productos=[];
+for(let i=0;i<500;i++){const b=B[i%12],v=Math.floor(i/12),o=v==0,marca=o?"ModaNova":BR[v%8],col=CO[Math.floor(v/8)%6];
+const precio=o?b[2]:Math.round(b[2]*(.8+R()*.5)/10)*10-1,d=R()<.25?[10,15,20,30][Math.floor(R()*4)]:0;
+const ta=TA.filter(()=>R()<.7);if(ta.length<2)ta.push("M","L");
+productos.push({id:i+1,tipo:b[1],ti:i%12,color:o?"":col,orig:o,nombre:o?b[0]:`${b[1]} ${col} ${marca}`,marca,precio,antes:d?Math.round(precio/(1-d/100)):0,desc:d,
+stockInicial:o?b[3]:(R()<.05?0:Math.floor(R()*25)+2),importado:o?!!b[4]:R()<.4,imagen:U+b[5]+"?auto=format&fit=crop&w=700&q=80",
+cat:b[6],emoji:b[7],tallas:[...new Set(ta)],dias:Math.floor(R()*6)+1,rate:+(3+R()*2).toFixed(1),rev:Math.floor(R()*400)+3,
+texto:`${b[1]} color ${col} de la marca ${marca}. Tela cómoda y duradera, corte moderno, devolución gratis en 30 días.`});}
+/* ===== utilidades de texto / búsqueda ===== */
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const palabras=s=>N(s).split(/[^a-z0-9]+/).filter(Boolean);
+/* raíz simple: quita plural (s/es) y género (a/o/e) -> playeras=playera, negra=negro */
+const stem=w=>{w=N(w);if(w.length>4&&/[^aeiou]es$/.test(w))w=w.slice(0,-2);else if(w.length>3&&w.endsWith("s")&&!w.endsWith("ss"))w=w.slice(0,-1);if(w.length>4&&/[aeo]$/.test(w))w=w.slice(0,-1);return w};
+const SYN0={sudadera:["hoodie"],hoodie:["sudadera"],buzo:["sudadera","hoodie"],camiseta:["playera"],remera:["playera"],pantalon:["jeans"],blusa:["camisa"],bermuda:["short"],cazadora:["chaqueta"],saco:["chaqueta"]};
+const SYN=Object.fromEntries(Object.entries(SYN0).map(([k,v])=>[stem(k),v.map(stem)]));
+/* se busca SOLO en nombre, tipo y marca (ya no en la descripción genérica ni en la categoría) */
+productos.forEach(p=>{const ws=palabras(p.nombre+" "+p.tipo+" "+p.marca);p.w=[...new Set(ws.map(stem))];p.wf=ws});
+const VOCF=[...new Set(productos.flatMap(p=>p.wf).filter(w=>w.length>2))],VOCS=[...new Set(VOCF.map(stem))];
+const COSTO_ENVIO=99,ENVIO_GRATIS_DESDE=1500;
+/* ===== almacenamiento ===== */
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let usuarios=ld("modanova_usuarios",{}),usuarioActual=null;try{usuarioActual=localStorage.getItem("modanova_usuarioActual")}catch(e){}
+let stock=ld("modanova2_stock",null);if(!stock){stock={};productos.forEach(p=>stock[p.id]=p.stockInicial);sv("modanova2_stock",stock)}
+let resenas=ld("modanova2_resenas",{});
+const guardarUsuarios=()=>sv("modanova_usuarios",usuarios),guardarStock=()=>sv("modanova2_stock",stock),guardarResenas=()=>sv("modanova2_resenas",resenas);
+const dinero=v=>new Intl.NumberFormat("es-MX",{style:"currency",currency:"MXN"}).format(v);
+const generarEstrellas=c=>{let r="";for(let i=1;i<=5;i++)r+=i<=Math.round(c)?"★":"☆";return r};
+const P=id=>productos[id-1];
+function obtenerValoracion(p){const l=resenas[p.id]||[],s=l.reduce((t,r)=>t+r.estrellas,0),n=p.rev+l.length;return{promedio:(p.rate*p.rev+s)/n,cantidad:n}}
+/* ===== imágenes: foto para los 12 originales; ilustración propia (prenda + color real) para las variantes ===== */
+const COL={negro:"#2b2b30",blanco:"#f6f6f6",azul:"#3568b5",gris:"#9a9aa4",rojo:"#c43d3d",verde:"#3a8a5a"};
+const COLO=["#f6f6f6","#9a9aa4","#4a6fa5","#2b2b30","#2b2b30","#2b2b30","#d8c3a0","#f6f6f6","#2b2b30","#8b5cf6","#334155","#d8c3a0"];
+const SUD="M64 30 L88 22 Q100 40 112 22 L136 30 L176 124 L154 134 L138 92 L138 178 L62 178 L62 92 L46 134 L24 124 Z",JEA="M60 20 L140 20 L150 182 L108 182 L100 72 L92 182 L50 182 Z";
+const GAR=[
+{b:"M62 34 L86 24 Q100 42 114 24 L138 34 L174 70 L152 92 L138 78 L138 172 L62 172 L62 78 L48 92 L26 70 Z",l:"M86 24 Q100 46 114 24 M62 160 L138 160"},
+{b:SUD,l:"M88 22 Q100 46 112 22 M62 162 L138 162 M28 122 L50 132 M172 122 L150 132"},
+{b:JEA,l:"M60 34 L140 34 M100 34 L100 72 M64 38 Q76 60 92 42 M136 38 Q124 60 108 42 M54 168 L92 168 M108 168 L146 168"},
+{b:"M62 28 L84 20 L100 32 L116 20 L138 28 L176 124 L154 134 L138 90 L138 168 L62 168 L62 90 L46 134 L24 124 Z",l:"M100 32 L100 168 M84 20 L100 48 L116 20 M70 128 L90 128 M110 128 L130 128 M62 156 L138 156"},
+{b:"M80 20 L90 20 Q100 44 110 20 L120 20 L128 76 L116 88 L154 184 L46 184 L84 88 L72 76 Z",l:"M84 88 L116 88"},
+{b:"M64 46 L136 46 L160 174 L40 174 Z",l:"M65 62 L135 62 M84 62 L72 174 M100 62 L100 174 M116 62 L128 174"},
+{b:JEA,l:"M60 34 L140 34 M100 34 L100 72 M58 100 L80 100 L80 134 L56 134 Z M142 100 L120 100 L120 134 L144 134 Z"},
+{b:"M64 30 L88 22 L100 36 L112 22 L136 30 L176 124 L154 134 L138 92 L138 178 L62 178 L62 92 L46 134 L24 124 Z",l:"M88 22 L100 36 L92 48 Z M112 22 L100 36 L108 48 Z M100 36 L100 178",d:[[100,62],[100,86],[100,110],[100,134],[100,158]]},
+{h:"M80 28 Q76 2 100 2 Q124 2 120 28 Q112 48 100 50 Q88 48 80 28 Z",b:SUD,l:"M86 24 L100 50 L114 24 M94 50 L94 76 M106 50 L106 76 M78 130 L122 130 L128 160 L72 160 Z"},
+{b:"M72 28 L86 28 Q100 74 114 28 L128 28 L142 100 Q100 116 58 100 Z",l:"M60 90 Q100 106 140 90"},
+{b:"M58 44 L142 44 L154 138 L108 138 L100 84 L92 138 L46 138 Z",l:"M58 58 L142 58 M92 58 L88 78 M108 58 L112 78"},
+{b:"M62 26 L86 18 L100 32 L114 18 L138 26 L174 130 L152 140 L138 96 L138 188 L62 188 L62 96 L48 140 L26 130 Z",l:"M86 18 L100 70 L114 18 M62 122 L138 122 M94 80 L94 150 M106 80 L106 150",d:[[94,92],[94,116],[94,140],[106,92],[106,116],[106,140]]}];
+const svgCache={};
+function prendaSVG(p){const c=p.color?COL[p.color]:COLO[p.ti],k=p.ti+c;if(svgCache[k])return svgCache[k];
+const lum=(parseInt(c.slice(1,3),16)*.3+parseInt(c.slice(3,5),16)*.59+parseInt(c.slice(5,7),16)*.11)/255,l=lum<.4?"rgba(255,255,255,.4)":"rgba(0,0,0,.3)",g=GAR[p.ti],st=`stroke="rgba(0,0,0,.45)" stroke-width="2.5" stroke-linejoin="round"`;
+const s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5f3ff"/><stop offset="1" stop-color="#ddd6fe"/></linearGradient></defs><rect width="200" height="200" fill="url(#g)"/><ellipse cx="100" cy="192" rx="54" ry="5" fill="rgba(0,0,0,.13)"/>`+
+(g.h?`<path d="${g.h}" fill="${c}" ${st}/>`:"")+`<path d="${g.b}" fill="${c}" ${st}/><path d="${g.l}" fill="none" stroke="${l}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`+(g.d||[]).map(d=>`<circle cx="${d[0]}" cy="${d[1]}" r="2.4" fill="${l}"/>`).join("")+`</svg>`;
+return svgCache[k]="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s)}
+const imgSrc=p=>p.orig?p.imagen:prendaSVG(p);
+const img=p=>`<img src="${imgSrc(p)}" alt="${esc(p.nombre)}" loading="lazy" onerror="this.onerror=null;this.src=prendaSVG(P(${p.id}))">`;
+/* ===== búsqueda con tolerancia a errores ===== */
+const S={q:"",corr:"",f:{cat:"",min:"",max:"",rate:0,imp:"",talla:"",rapido:false,stock:false},sort:"rel",page:1};
+const F0={...S.f};
+function lev(a,b){const m=[];for(let i=0;i<=a.length;i++)m[i]=[i];for(let j=1;j<=b.length;j++)m[0][j]=j;
+for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)m[i][j]=Math.min(m[i-1][j]+1,m[i][j-1]+1,m[i-1][j-1]+(a[i-1]==b[j-1]?0:1));return m[a.length][b.length]}
+function fix(t){const n=N(t);if(n.length<3||!/^[a-z]+$/.test(n))return t;const s=stem(n);if(VOCS.some(w=>w.startsWith(s)))return t;let best=t,bd=9;const mx=n.length>6?2:1;VOCF.forEach(w=>{const d=lev(n,w);if(d<bd&&d<=mx){bd=d;best=w}});return best}
+const toks=q=>palabras(q).map(stem);
+const alts=t=>[t,...(SYN[t]||[])];
+const casa=(t,p)=>alts(t).some(a=>p.w.some(w=>w.startsWith(a)));
+const hit=q=>{const T=toks(q);return T.length?productos.filter(p=>T.every(t=>casa(t,p))):productos.slice()};
+const puntaje=(p,T)=>T.reduce((s,t)=>{let m=0;alts(t).forEach(a=>p.w.forEach(w=>{if(w==a)m=Math.max(m,3);else if(w.startsWith(a))m=Math.max(m,1)}));return s+m},0)+(T.some(t=>alts(t).includes(p.w[0]))?2:0);
+function buscarBase(){const q=S.q.trim();let r=hit(q);S.corr="";
+if(q&&!r.length){const ps=palabras(q),c=ps.map(fix).join(" ");if(c!==ps.join(" ")){const r2=hit(c);if(r2.length){S.corr=c;r=r2}}}
+if(q&&S.sort=="rel"){const T=toks(S.corr||q);r=r.map(p=>[p,puntaje(p,T)]).sort((x,y)=>y[1]-x[1]||x[0].id-y[0].id).map(x=>x[0])}return r}
+function resaltar(s){const T=toks(S.corr||S.q);if(!T.length)return esc(s);return s.split(/([A-Za-zÀ-ÿ0-9]+)/).map((w,i)=>{if(i%2==0)return esc(w);const sw=stem(w);return T.some(t=>t.length>1&&alts(t).some(a=>sw.startsWith(a)))?`<mark>${esc(w)}</mark>`:esc(w)}).join("")}
+const filtrar=r=>{const f=S.f;return r.filter(p=>(!f.cat||p.cat==f.cat)&&(!f.min||p.precio>=+f.min)&&(!f.max||p.precio<=+f.max)&&obtenerValoracion(p).promedio>=f.rate&&(f.imp===""||p.importado==(f.imp=="1"))&&(!f.talla||p.tallas.includes(f.talla))&&(!f.rapido||p.dias<=3)&&(!f.stock||stock[p.id]>0))};
+/* ===== mostrar productos ===== */
+function mostrarProductos(){
+const base=buscarBase(),res=filtrar(base),f=S.f,s=S.sort;
+res.sort((a,b)=>s=="pa"?a.precio-b.precio:s=="pd"?b.precio-a.precio:s=="rt"?obtenerValoracion(b).promedio-obtenerValoracion(a).promedio:s=="of"?b.desc-a.desc:0);
+const cc={};base.forEach(p=>cc[p.cat]=(cc[p.cat]||0)+1);
+$("as").innerHTML=`<h4>Categoría</h4><button class="cat ${f.cat?"":"on"}" onclick="setF('cat','')">Todas <span>${base.length}</span></button>`+CATS.map(c=>`<button class="cat ${f.cat==c?"on":""}" onclick="setF('cat','${c}')">${c} <span>${cc[c]||0}</span></button>`).join("")+
+`<h4>Precio (MXN)</h4><div class="rango"><input type="number" min="0" placeholder="Mín" value="${f.min}" onchange="setF('min',this.value)"><input type="number" min="0" placeholder="Máx" value="${f.max}" onchange="setF('max',this.value)"></div>
+<h4>Valoración</h4>${[4,3,0].map(n=>`<label><input type="radio" name="rt" ${f.rate==n?"checked":""} onchange="setF('rate',${n})"> ${n?`<span class="estrellas" style="font-size:15px">${generarEstrellas(n)}</span> y más`:"Cualquiera"}</label>`).join("")}
+<h4>Origen</h4><select onchange="setF('imp',this.value)"><option value="">Todos</option><option value="0" ${f.imp=="0"?"selected":""}>🇲🇽 Nacional</option><option value="1" ${f.imp=="1"?"selected":""}>🌎 Importado</option></select>
+<h4>Talla</h4><select onchange="setF('talla',this.value)"><option value="">Todas</option>${TA.map(t=>`<option ${f.talla==t?"selected":""}>${t}</option>`).join("")}</select>
+<h4>Disponibilidad</h4><label><input type="checkbox" ${f.rapido?"checked":""} onchange="setF('rapido',this.checked)"> 🚚 Entrega en 3 días o menos</label><label><input type="checkbox" ${f.stock?"checked":""} onchange="setF('stock',this.checked)"> Solo en stock</label>`;
+$("cnt").textContent=res.length+" resultado"+(res.length==1?"":"s")+(S.q?` para “${S.q}”`:"");
+const ch=[];if(S.q)ch.push(["q","Búsqueda: "+S.q]);if(f.cat)ch.push(["cat",f.cat]);if(f.min||f.max)ch.push(["pr",`${f.min?dinero(f.min):"$0"} – ${f.max?dinero(f.max):"∞"}`]);
+if(f.rate)ch.push(["rate",f.rate+"★ y más"]);if(f.imp!=="")ch.push(["imp",f.imp=="1"?"Importado":"Nacional"]);if(f.talla)ch.push(["talla","Talla "+f.talla]);if(f.rapido)ch.push(["rapido","Entrega ≤3 días"]);if(f.stock)ch.push(["stock","En stock"]);
+$("chips").innerHTML=ch.map(c=>`<button class="chip" onclick="quitar('${c[0]}')">${esc(c[1])} ✕</button>`).join("")+(ch.length>1?`<button class="chip limpiar" onclick="quitar('all')">Limpiar todo</button>`:"");
+$("corr").innerHTML=S.corr?`<div class="correccion">Mostrando resultados para <strong>${esc(S.corr)}</strong>. No se encontró “${esc(S.q)}”.</div>`:"";
+$("cantidadCarrito").textContent=usuarioActual?Object.values(usuarios[usuarioActual].carrito).reduce((a,b)=>a+b,0):0;
+const cont=$("productos");
+if(!res.length){$("pag").innerHTML="";cont.style.display="block";
+cont.innerHTML=`<div class="sin-res"><div class="big">🔎</div><h2>No encontramos resultados${S.q?` para “${esc(S.q)}”`:""}</h2><p>${base.length?"Hay prendas que coinciden, pero tus filtros son muy estrictos.":"Revisa la ortografía o prueba con otra palabra."}</p>
+<ul><li>Usa palabras más generales (ej. “playera”, “jeans”)</li><li>Quita algunos filtros</li><li>Explora una categoría</li></ul>
+${ch.length?`<button class="agregar" style="width:auto;padding:12px 24px" onclick="quitar('all')">Quitar búsqueda y filtros</button><br><br>`:""}${CATS.map(c=>`<button class="chip" onclick="quitar('all');setF('cat','${c}')">${c}</button>`).join("")}</div>`;return}
+cont.style.display="";const per=24,pgs=Math.ceil(res.length/per);S.page=Math.min(S.page,pgs);cont.innerHTML="";
+res.slice((S.page-1)*per,S.page*per).forEach(p=>{const c=stock[p.id],v=obtenerValoracion(p);
+const ts=c===0?"Agotado":c<=3?"⚠️ Últimas unidades: "+c:"Stock disponible: "+c,tc=c===0?"agotado":c<=3?"stock-bajo":"";
+const t=document.createElement("div");t.className="producto";
+t.innerHTML=`<div class="imagen-producto" onclick="detalle(${p.id})">${p.desc?`<span class="oferta">-${p.desc}%</span>`:""}${p.emoji}${img(p)}</div>
+<div class="info-producto"><h3 onclick="detalle(${p.id})">${resaltar(p.nombre)}</h3><div class="marca">Marca: ${p.marca} · ${p.cat}</div>
+<div class="precio">${dinero(p.precio)}${p.antes?`<s>${dinero(p.antes)}</s>`:""}</div>
+<span class="origen ${p.importado?"importado":"nacional"}">${p.importado?"🌎 Importado":"🇲🇽 Nacional"}</span>
+<div class="entrega">🚚 Llega en ${p.dias} día${p.dias>1?"s":""} · envío ${precioEnvio(p)}</div>
+<div class="valoracion"><span class="estrellas">${generarEstrellas(v.promedio)}</span><span class="promedio">${v.promedio.toFixed(1)} / 5 · ${v.cantidad} reseñas</span></div>
+<div class="stock ${tc}">${ts}</div>
+<button class="agregar" onclick="agregarCarrito(${p.id})" ${c===0?"disabled":""}>${c===0?"Agotado":"Agregar al carrito"}</button>
+<button class="btn-resenas" onclick="abrirResenas(${p.id})">⭐ Ver reseñas</button></div>`;cont.appendChild(t)});
+let g="";for(let i=1;i<=pgs;i++)g+=`<button class="${i==S.page?"on":""}" onclick="S.page=${i};mostrarProductos();irProductos()">${i}</button>`;$("pag").innerHTML=pgs>1?g:""}
+const precioEnvio=p=>p.precio>=ENVIO_GRATIS_DESDE?"GRATIS":dinero(COSTO_ENVIO)+" (gratis desde "+dinero(ENVIO_GRATIS_DESDE)+")";
+function setF(k,v){S.f[k]=v;S.page=1;mostrarProductos()}
+function quitar(x){if(x=="all"){S.f={...F0};S.q="";$("q").value=""}else if(x=="q"){S.q="";$("q").value=""}else if(x=="pr")S.f.min=S.f.max="";else S.f[x]=F0[x];S.page=1;mostrarProductos()}
+function buscar(q){S.q=String(q).trim().replace(/\s+/g," ");S.page=1;si=-1;gh("");$("q").value=S.q;$("sug").style.display="none";mostrarProductos();irProductos()}
+/* sugerencias */
+let si=-1;
+$("sf").onsubmit=e=>{e.preventDefault();buscar($("q").value)};
+/* ===== autocompletado mientras se escribe ===== */
+const DISP={};productos.forEach(p=>(p.nombre+" "+p.tipo+" "+p.marca).split(/\s+/).forEach(w=>{const k=N(w);if(k.length>2&&/^[a-z]+$/.test(k)&&!DISP[k])DISP[k]=w.toLowerCase()}));
+/* palabras que completan la que se está escribiendo, dentro de lo ya escrito (contexto) */
+function completar(ctx,tk){let base=productos,cu=ctx.trim();
+if(cu){base=hit(cu);if(!base.length){const c=palabras(cu).map(fix).join(" ");const b2=c?hit(c):[];if(b2.length){base=b2;cu=c}}}
+const cs=new Set(toks(cu)),tally={};
+base.forEach(p=>{const seen=new Set();p.wf.forEach(w=>{if(w.length<3||!w.startsWith(tk))return;const s=stem(w);if(cs.has(s)||seen.has(s))return;seen.add(s);const o=tally[s]||(tally[s]={n:0,f:{}});o.n++;o.f[w]=(o.f[w]||0)+1})});
+return{ctx:cu,list:Object.values(tally).map(o=>({w:Object.entries(o.f).sort((x,y)=>y[1]-x[1])[0][0],n:o.n})).sort((x,y)=>y.n-x.n||x.w.localeCompare(y.w))}}
+/* palabras parecidas a lo escrito (errores de ortografía a mitad de escritura) */
+function parecidas(tk){if(tk.length<4)return[];const mx=tk.length>6?2:1,seen=new Set(),r=[];
+VOCF.map(w=>({w,d:Math.min(lev(tk,w.slice(0,tk.length-1)),lev(tk,w.slice(0,tk.length)),lev(tk,w.slice(0,tk.length+1)))})).filter(x=>x.d<=mx).sort((x,y)=>x.d-y.d).forEach(x=>{const s=stem(x.w);if(!seen.has(s)){seen.add(s);r.push(x.w)}});return r.slice(0,4)}
+/* texto "fantasma" dentro de la barra: se acepta con Tab o → */
+let GH=null;
+function gh(typed,rest,full){GH=rest?full:null;$("gh").innerHTML=rest?`<span style="visibility:hidden">${esc(typed)}</span>${esc(rest)}`:""}
+$("q").oninput=()=>{const inp=$("q"),raw=inp.value,b=$("sug");si=-1;const v=raw.replace(/\s+/g," ").replace(/^ /,"");
+if(!v.trim()){b.style.display="none";gh("");return}
+const fin=/ $/.test(v),ps=v.trim().split(" "),tkRaw=fin?"":ps[ps.length-1],tk=N(tkRaw),ctxRaw=(fin?ps:ps.slice(0,-1)).join(" ");
+const it=[],seen=new Set(),add=o=>{const k=N(o.t);if(it.length>=8||seen.has(k))return;seen.add(k);it.push(o)};
+const cnt=n=>n+" resultado"+(n==1?"":"s");
+/* 1) completar la palabra en curso (o proponer la siguiente si terminó con espacio) */
+const cm=completar(ctxRaw,tk),pre=cm.ctx?cm.ctx+" ":"";
+cm.list.slice(0,5).forEach(c=>add({t:pre+(DISP[c.w]||c.w),l:cnt(c.n),w:1}));
+/* 2) categorías */
+if(v.trim().length>=2)CATS.forEach(c=>{if(N(c).includes(N(v.trim()))&&it.filter(o=>o.c).length<2)add({t:c,l:"categoría",c:1})});
+/* 3) prenda + lo escrito (ej. "negro" → "Playera negro"), solo si la palabra ya está completa */
+if(!fin&&VOCF.includes(tk)){const g={};hit(v).forEach(p=>g[p.tipo]=(g[p.tipo]||0)+1);const tv=palabras(v);
+Object.entries(g).sort((x,y)=>y[1]-x[1]).forEach(([tipo,n])=>{const ts=palabras(tipo).map(stem),resto=tv.filter(w=>!alts(stem(w)).some(a=>ts.some(s=>s.startsWith(a))));add({t:(tipo+" "+resto.join(" ")).trim(),l:cnt(n)})})}
+/* 4) si nada coincide: palabras parecidas */
+if(!it.length&&tk.length>=4)parecidas(tk).forEach(w=>{const t=pre+(DISP[w]||w);if(hit(t).length)add({t,l:"¿Quisiste decir?"})});
+b.innerHTML=it.length?it.map(o=>{const ok=o.w&&N(o.t).startsWith(N(v));const show=ok?`${esc(o.t.slice(0,v.length))}<b>${esc(o.t.slice(v.length))}</b>`:esc(o.t);return`<div data-v="${esc(o.t)}" data-c="${o.c?1:""}">${show}<small>${esc(o.l)}</small></div>`}).join(""):`<div style="cursor:default"><small>Sin sugerencias para “${esc(v.trim())}”</small></div>`;
+b.style.display="block";
+const top=it.find(o=>o.w&&N(o.t).startsWith(N(v))&&o.t.length>v.length);
+if(top&&raw===v&&inp.selectionStart==raw.length)gh(raw,top.t.slice(raw.length),top.t);else gh("")};
+$("q").onfocus=()=>{if($("q").value.trim())$("q").oninput()};
+$("q").onblur=()=>gh("");
+$("q").onkeydown=e=>{const sg=$("sug"),inp=$("q"),vis=sg.style.display=="block",it=vis?[...sg.querySelectorAll("[data-v]")]:[];
+if(e.key=="Escape"){sg.style.display="none";si=-1;gh("");return}
+if(e.key=="Tab"&&!e.shiftKey&&si>-1&&it[si]){e.preventDefault();inp.value=it[si].dataset.v;inp.oninput();return}
+if((e.key=="Tab"&&!e.shiftKey||e.key=="ArrowRight")&&GH&&inp.selectionStart==inp.value.length&&inp.selectionEnd==inp.value.length){e.preventDefault();inp.value=GH;inp.oninput();return}
+if(!it.length)return;
+if(e.key=="ArrowDown"||e.key=="ArrowUp"){e.preventDefault();si=e.key=="ArrowDown"?(si+1)%it.length:(si<=0?it.length-1:si-1);it.forEach((x,i)=>x.classList.toggle("on",i==si))}
+else if(e.key=="Enter"&&si>-1&&it[si]){e.preventDefault();it[si].click()}};
+$("sug").onclick=e=>{const d=e.target.closest("[data-v]");if(!d)return;if(d.dataset.c){S.f.cat=d.dataset.v;buscar("")}else buscar(d.dataset.v)};
+document.addEventListener("click",e=>{if(!e.target.closest(".sb")){$("sug").style.display="none";gh("")}});
+/* ===== autenticación ===== */
+let modoAuth="login";
+const abrirAuth=()=>$("authModal").classList.add("activo"),cerrarModal=id=>$(id).classList.remove("activo");
+function cambiarModo(m){modoAuth=m;$("loginTab").classList.toggle("activo",m=="login");$("registroTab").classList.toggle("activo",m=="registro");$("btnAuth").textContent=m=="login"?"Iniciar sesión":"Crear cuenta";$("mensajeAuth").textContent=""}
+function autenticar(e){e.preventDefault();const u=$("usuario").value.trim(),pw=$("password").value,m=$("mensajeAuth");
+if(modoAuth=="registro"){if(usuarios[u]){m.className="mensaje error";m.textContent="❌ Ese usuario ya existe.";return}usuarios[u]={password:pw,carrito:{}};guardarUsuarios();m.className="mensaje exito";m.textContent="✅ Cuenta creada correctamente."}
+else if(!usuarios[u]||usuarios[u].password!==pw){m.className="mensaje error";m.textContent="❌ Usuario o contraseña incorrectos.";return}
+usuarioActual=u;try{localStorage.setItem("modanova_usuarioActual",u)}catch(x){}
+setTimeout(()=>cerrarModal("authModal"),modoAuth=="registro"?600:0);actualizarCuenta();mostrarProductos()}
+function actualizarCuenta(){const b=$("cuentaBtn");if(usuarioActual){b.textContent="👤 "+usuarioActual+" · Cerrar sesión";b.onclick=cerrarSesion}else{b.textContent="Iniciar sesión";b.onclick=abrirAuth}}
+function cerrarSesion(){usuarioActual=null;try{localStorage.removeItem("modanova_usuarioActual")}catch(e){}actualizarCuenta();mostrarProductos()}
+function comprobarLogin(){if(!usuarioActual){abrirAuth();const m=$("mensajeAuth");m.className="mensaje error";m.textContent="🔒 Inicia sesión o crea una cuenta.";return false}return true}
+/* ===== carrito ===== */
+function agregarCarrito(id){if(!comprobarLogin())return;if(stock[id]<=0){alert("Producto agotado.");return}const c=usuarios[usuarioActual].carrito;c[id]=(c[id]||0)+1;stock[id]--;guardarUsuarios();guardarStock();mostrarProductos();if($("carritoModal").classList.contains("activo"))mostrarCarrito()}
+function cambiarCantidad(id,d){const c=usuarios[usuarioActual].carrito;if(d>0){if(stock[id]<=0){alert("No quedan unidades.");return}c[id]++;stock[id]--}else{if(c[id]<=1)delete c[id];else c[id]--;stock[id]++}guardarUsuarios();guardarStock();mostrarProductos();mostrarCarrito()}
+function eliminarProducto(id){const c=usuarios[usuarioActual].carrito;stock[id]+=c[id];delete c[id];guardarUsuarios();guardarStock();mostrarProductos();mostrarCarrito()}
+function abrirCarrito(){if(!comprobarLogin())return;$("carritoModal").classList.add("activo");mostrarCarrito()}
+function mostrarCarrito(){const co=$("carritoItems"),re=$("resumenCompra");$("cuentaInfo").innerHTML="👤 Cuenta activa: <strong>"+usuarioActual+"</strong>";
+const el=Object.entries(usuarios[usuarioActual].carrito);if(!el.length){co.innerHTML='<div class="vacio">🛒 Tu carrito está vacío.</div>';re.innerHTML="";return}
+let sub=0;co.innerHTML="";el.forEach(([id,q])=>{const p=P(+id),t=p.precio*q;sub+=t;const d=document.createElement("div");d.className="carrito-item";
+d.innerHTML=`<div class="carrito-icono">${p.emoji}${img(p)}</div><div class="carrito-info"><strong>${p.nombre}</strong><small>${dinero(p.precio)} cada uno</small><small>${p.importado?"🌎 Importado":"🇲🇽 Nacional"}</small>
+<div class="cantidad"><button onclick="cambiarCantidad(${p.id},-1)">−</button><span>${q}</span><button onclick="cambiarCantidad(${p.id},1)">+</button></div><button class="eliminar" onclick="eliminarProducto(${p.id})">Eliminar</button></div><strong>${dinero(t)}</strong>`;co.appendChild(d)});
+const env=sub<ENVIO_GRATIS_DESDE?COSTO_ENVIO:0;
+re.innerHTML=(env===0?`<div class="envio-gratis">🚚 ¡Tienes envío GRATIS!</div>`:`<div class="aviso-envio">🚚 Envío gratis en compras superiores a ${dinero(ENVIO_GRATIS_DESDE)}.<br><br>Te faltan <strong>${dinero(ENVIO_GRATIS_DESDE-sub)}</strong> para obtener envío gratis.</div>`)+
+`<div class="linea"><span>Subtotal:</span><strong>${dinero(sub)}</strong></div><div class="linea envio"><span>🚚 Envío:</span><strong>${env?dinero(env):"GRATIS"}</strong></div><div class="linea total"><span>Total:</span><strong>${dinero(sub+env)}</strong></div>`}
+function finalizarCompra(){if(!usuarioActual)return;const c=usuarios[usuarioActual].carrito;if(!Object.keys(c).length){alert("🛒 Tu carrito está vacío.");return}if(!confirm("¿Deseas finalizar tu compra?"))return;
+alert("✅ ¡Compra realizada correctamente!\n\nTu pedido será enviado a tu domicilio.");usuarios[usuarioActual].carrito={};guardarUsuarios();mostrarProductos();mostrarCarrito()}
+/* ===== detalle ===== */
+function detalle(id){const p=P(id),v=obtenerValoracion(p),c=stock[id];
+$("detalle").innerHTML=`<div class="imagen-producto" style="height:280px;border-radius:12px;cursor:default">${p.emoji}${img(p)}</div><h2 style="margin:16px 0 6px">${p.nombre}</h2>
+<div class="estrellas">${generarEstrellas(v.promedio)} <span class="promedio">${v.promedio.toFixed(1)} · ${v.cantidad} reseñas</span></div>
+<div class="precio" style="margin:8px 0">${dinero(p.precio)}${p.antes?`<s>${dinero(p.antes)}</s>`:""}</div>
+<p style="line-height:1.5;margin-bottom:10px">${p.texto}</p>
+<p style="color:#666;font-size:14px;line-height:1.7">Categoría: ${p.cat}<br>Marca: ${p.marca} · ${p.importado?"🌎 Importado":"🇲🇽 Nacional"}<br>Tallas: ${p.tallas.join(", ")}<br>🚚 Envío: ${precioEnvio(p)} · Llega en ${p.dias} día(s)<br>Stock: ${c}</p>
+<button class="agregar" style="margin-top:16px" onclick="agregarCarrito(${id})" ${c?"":"disabled"}>${c?"Agregar al carrito":"Agotado"}</button>`;$("detalleModal").classList.add("activo")}
+/* ===== reseñas ===== */
+let prodRes=null,estSel=0;
+function abrirResenas(id){prodRes=id;estSel=0;$("tituloResenas").textContent="⭐ Reseñas de "+P(id).nombre;$("resenasModal").classList.add("activo");$("textoResena").value="";$("mensajeResena").textContent="";selEstrellas(0);mostrarResenas(id)}
+function selEstrellas(n){estSel=n;document.querySelectorAll("#selectorEstrellas button").forEach((b,i)=>b.classList.toggle("seleccionada",i<n))}
+const escaparHTML=t=>{const d=document.createElement("div");d.textContent=t;return d.innerHTML};
+function mostrarResenas(id){const l=resenas[id]||[],v=obtenerValoracion(P(id)),li=$("listaResenas");
+$("resumenEstrellas").innerHTML=`<div style="text-align:center"><div class="estrellas" style="font-size:30px">${generarEstrellas(v.promedio)}</div><strong style="font-size:22px">${v.promedio.toFixed(1)} / 5</strong><p>Basado en ${v.cantidad} reseñas</p></div>`;
+if(!l.length){li.innerHTML='<div class="sin-resenas">Aún no hay comentarios. ¡Sé el primero en escribir uno! ⭐</div>';return}
+li.innerHTML="";l.slice().reverse().forEach(r=>{const d=document.createElement("div");d.className="resena";
+d.innerHTML=`<div class="resena-cabecera"><span class="resena-usuario">👤 ${escaparHTML(r.usuario)}</span><span class="resena-fecha">${new Date(r.fecha).toLocaleDateString("es-MX")}</span></div><div class="resena-estrellas">${generarEstrellas(r.estrellas)}</div><div class="resena-texto">${escaparHTML(r.comentario)}</div>`+
+(usuarioActual&&r.usuario===usuarioActual?`<button class="eliminar-resena" onclick="eliminarResena(${id},${l.indexOf(r)})">🗑️ Eliminar mi reseña</button>`:"");li.appendChild(d)})}
+function guardarResena(e){e.preventDefault();if(!comprobarLogin())return;const m=$("mensajeResena");
+if(!estSel){m.className="mensaje error";m.textContent="⭐ Selecciona una valoración.";return}
+const c=$("textoResena").value.trim();if(!c){m.className="mensaje error";m.textContent="📝 Escribe un comentario.";return}
+resenas[prodRes]=resenas[prodRes]||[];if(resenas[prodRes].some(r=>r.usuario===usuarioActual)){m.className="mensaje error";m.textContent="❌ Ya has reseñado este producto.";return}
+resenas[prodRes].push({usuario:usuarioActual,estrellas:estSel,comentario:c,fecha:new Date().toISOString()});guardarResenas();m.className="mensaje exito";m.textContent="✅ ¡Reseña publicada!";$("textoResena").value="";selEstrellas(0);mostrarResenas(prodRes);mostrarProductos()}
+function eliminarResena(id,i){const l=resenas[id];if(!usuarioActual||!l||!l[i]||l[i].usuario!==usuarioActual)return;if(!confirm("¿Quieres eliminar tu reseña?"))return;l.splice(i,1);if(!l.length)delete resenas[id];guardarResenas();mostrarResenas(id);mostrarProductos()}
+const irProductos=()=>$("productosSection").scrollIntoView({behavior:"smooth"});
+["authModal","carritoModal","resenasModal","detalleModal"].forEach(id=>$(id).addEventListener("click",function(e){if(e.target===this)cerrarModal(id)}));
+if(usuarioActual&&!usuarios[usuarioActual])usuarioActual=null;
+mostrarProductos();actualizarCuenta();
+</script></body></html>
