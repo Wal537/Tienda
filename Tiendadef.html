@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ModaNova - Tienda de Ropa</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222}
+header{background:#111827;color:#fff;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:15px;position:sticky;top:0;z-index:100;box-shadow:0 3px 15px rgba(0,0,0,.2)}
+.logo{font-size:27px;font-weight:bold;white-space:nowrap}
+.sb{flex:1;max-width:560px;position:relative}
+.sb form{display:flex}
+.sb input{flex:1;padding:11px 14px;border:none;border-radius:8px 0 0 8px;font-size:15px;min-width:0}
+.sb .lupa{border:none;background:#7c3aed;color:#fff;padding:0 18px;border-radius:0 8px 8px 0;cursor:pointer}
+.iw{position:relative;flex:1;display:flex;min-width:0}.sb input,#gh{font-family:inherit;font-size:15px;line-height:normal;letter-spacing:normal}
+#gh{position:absolute;left:14px;right:8px;top:0;bottom:0;display:flex;align-items:center;pointer-events:none;color:#a79fbd;white-space:pre;overflow:hidden}
+#sug b{font-weight:700}
+#sug{display:none;position:absolute;left:0;right:0;top:100%;background:#fff;color:#222;border-radius:0 0 10px 10px;box-shadow:0 8px 20px rgba(0,0,0,.25);overflow:hidden}
+#sug div{padding:11px 14px;cursor:pointer;display:flex;justify-content:space-between}
+#sug div:hover,#sug .on{background:#ede9fe}#sug small{color:#888}
+nav{display:flex;gap:10px;align-items:center}
+nav button{border:none;padding:10px 15px;border-radius:8px;cursor:pointer;background:transparent;color:#fff;font-size:15px}
+nav button:hover{background:#374151}.carrito-btn{background:#7c3aed!important}
+.hero{background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),url("https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80");background-size:cover;background-position:center;color:#fff;text-align:center;padding:100px 20px}
+.hero h1{font-size:60px;margin-bottom:15px}.hero p{font-size:22px}
+.hero button{margin-top:25px;padding:14px 25px;border:none;border-radius:8px;background:#fff;color:#7c3aed;font-weight:bold;cursor:pointer}
+main{max-width:1350px;margin:auto;padding:55px 20px}
+.titulo{text-align:center;margin-bottom:25px}.titulo h2{font-size:34px;margin-bottom:10px}.titulo p{color:#666}
+.demo{text-align:center;font-size:13px;color:#666;margin-bottom:25px}
+.demo button{border:1px dashed #7c3aed;background:none;color:#7c3aed;border-radius:16px;padding:5px 11px;margin:3px;cursor:pointer}
+.layout{display:grid;grid-template-columns:250px 1fr;gap:25px}
+aside{background:#fff;border-radius:16px;padding:18px;align-self:start;position:sticky;top:90px;box-shadow:0 5px 18px rgba(0,0,0,.08)}
+aside h4{margin:16px 0 8px;font-size:14px}aside h4:first-child{margin-top:0}
+aside label{display:flex;gap:8px;align-items:center;padding:4px 0;font-size:14px;cursor:pointer}
+.cat{display:flex;justify-content:space-between;width:100%;background:none;border:none;padding:7px 9px;border-radius:8px;cursor:pointer;font-size:14px;text-align:left}
+.cat:hover{background:#ede9fe}.cat.on{background:#7c3aed;color:#fff}.cat span{opacity:.7}
+.rango{display:flex;gap:6px}
+aside input[type=number],select{width:100%;padding:9px;border:1px solid #ccc;border-radius:8px;font-size:14px;background:#fff}
+.barra{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chip{background:#7c3aed;color:#fff;border:none;border-radius:20px;padding:6px 13px;font-size:13px;cursor:pointer;margin:2px}
+.chip.limpiar{background:none;color:#7c3aed;text-decoration:underline}
+.correccion{background:#fff7ed;color:#c2410c;border-radius:10px;padding:12px 15px;margin-bottom:14px;font-size:14px}
+.correccion a{color:#7c3aed;font-weight:bold;cursor:pointer}
+.productos{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:25px}
+.producto{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 5px 18px rgba(0,0,0,.08);transition:.25s;display:flex;flex-direction:column}
+.producto:hover{transform:translateY(-6px)}
+.imagen-producto{height:270px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:70px;background:#ede9fe;cursor:pointer}
+.imagen-producto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:.3s}
+.producto:hover img{transform:scale(1.06)}
+.oferta{position:absolute;top:10px;left:10px;z-index:2;background:#dc2626;color:#fff;font-size:12px;font-weight:bold;padding:4px 9px;border-radius:6px}
+.info-producto{padding:18px;display:flex;flex-direction:column;flex:1}
+.info-producto h3{margin-bottom:6px;cursor:pointer;font-size:16px}
+mark{background:#fde68a;border-radius:2px}
+.marca{font-size:12px;color:#777;margin-bottom:6px}
+.precio{color:#7c3aed;font-size:22px;font-weight:bold;margin-bottom:4px}.precio s{font-size:13px;color:#999;font-weight:normal;margin-left:5px}
+.origen{display:inline-block;padding:6px 10px;border-radius:20px;font-size:13px;font-weight:bold;margin:5px 0;align-self:flex-start}
+.importado{background:#dbeafe;color:#1d4ed8}.nacional{background:#dcfce7;color:#15803d}
+.entrega{font-size:12px;color:#2563eb;margin-top:4px}
+.stock{margin:10px 0;color:#555;font-size:14px}.stock-bajo{color:#d97706;font-weight:bold}.agotado{color:#dc2626;font-weight:bold}
+.agregar{width:100%;padding:13px;border:none;border-radius:8px;background:#7c3aed;color:#fff;font-weight:bold;cursor:pointer;margin-top:auto}
+.agregar:hover{background:#5b21b6}.agregar:disabled{background:#aaa;cursor:not-allowed}
+.valoracion{margin:10px 0;padding:10px;background:#fafafa;border-radius:10px}
+.estrellas{color:#f59e0b;font-size:18px;letter-spacing:2px}.promedio{color:#555;font-size:13px;margin-left:5px}
+.btn-resenas{width:100%;padding:10px;margin-top:10px;border:1px solid #7c3aed;background:#fff;color:#7c3aed;border-radius:8px;font-weight:bold;cursor:pointer}
+.btn-resenas:hover{background:#ede9fe}
+.paginas{display:flex;gap:6px;justify-content:center;margin-top:35px;flex-wrap:wrap}
+.paginas button{border:1px solid #ddd;background:#fff;padding:9px 14px;border-radius:8px;cursor:pointer}.paginas .on{background:#7c3aed;color:#fff;border-color:#7c3aed}
+.sin-res{background:#fff;border-radius:16px;padding:50px 25px;text-align:center;box-shadow:0 5px 18px rgba(0,0,0,.08)}
+.sin-res .big{font-size:60px}.sin-res h2{margin:10px 0}.sin-res p{color:#666}
+.sin-res ul{text-align:left;max-width:360px;margin:15px auto;color:#666;line-height:1.8}
+footer{text-align:center;padding:35px;background:#111827;color:#fff}
+.modal-fondo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);justify-content:center;align-items:center;z-index:500;padding:20px}
+.modal-fondo.activo{display:flex}
+.modal{background:#fff;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;border-radius:16px;padding:28px;position:relative}
+.cerrar{position:absolute;right:15px;top:10px;background:none;border:none;font-size:30px;cursor:pointer}
+.modal h2{margin-bottom:20px}
+.tabs{display:flex;gap:5px;background:#eee;padding:5px;border-radius:10px;margin-bottom:20px}
+.tabs button{flex:1;padding:11px;border:none;background:transparent;border-radius:8px;cursor:pointer}.tabs button.activo{background:#fff;font-weight:bold}
+.campo{margin-bottom:16px}.campo label{display:block;margin-bottom:7px;font-weight:bold}
+.campo input,.campo textarea{width:100%;padding:13px;border:1px solid #ccc;border-radius:8px;font-size:15px}
+.campo textarea{resize:vertical;min-height:100px}
+.btn-submit{width:100%;padding:14px;border:none;border-radius:8px;background:#7c3aed;color:#fff;font-weight:bold;cursor:pointer}
+.mensaje{min-height:20px;margin-bottom:12px}.error{color:#dc2626}.exito{color:#16a34a}
+.selector-estrellas{display:flex;gap:5px;margin:10px 0 20px}
+.selector-estrellas button{border:none;background:transparent;font-size:35px;color:#ccc;cursor:pointer;transition:.2s}
+.selector-estrellas button:hover,.selector-estrellas button.seleccionada{color:#f59e0b;transform:scale(1.1)}
+.resena{border:1px solid #e5e7eb;border-radius:12px;padding:15px;margin-bottom:12px;background:#fafafa}
+.resena-cabecera{display:flex;justify-content:space-between;gap:10px;margin-bottom:7px}
+.resena-usuario{font-weight:bold;color:#4c1d95}.resena-fecha{color:#888;font-size:12px}
+.resena-estrellas{color:#f59e0b;font-size:18px;margin-bottom:8px}.resena-texto{color:#444;line-height:1.5}
+.eliminar-resena{margin-top:10px;border:none;background:#fee2e2;color:#dc2626;padding:7px 10px;border-radius:6px;cursor:pointer}
+.sin-resenas,.vacio{text-align:center;color:#777;padding:25px}
+.cuenta{background:#ede9fe;padding:14px;border-radius:10px;margin-bottom:15px}
+.carrito-item{display:flex;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid #ddd}
+.carrito-icono{width:70px;height:70px;border-radius:10px;overflow:hidden;flex-shrink:0;background:#ede9fe;display:flex;align-items:center;justify-content:center;font-size:30px;position:relative}
+.carrito-icono img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.carrito-info{flex:1}.carrito-info strong{display:block;margin-bottom:4px}.carrito-info small{display:block;color:#777;margin-bottom:3px}
+.cantidad{display:flex;gap:8px;align-items:center;margin-top:8px}
+.cantidad button{width:28px;height:28px;border:none;border-radius:6px;background:#ddd;cursor:pointer}
+.eliminar{background:none;border:none;color:#dc2626;cursor:pointer;margin-top:7px}
+.resumen{margin-top:20px;padding-top:15px;border-top:2px solid #ddd}
+.linea{display:flex;justify-content:space-between;margin:10px 0;color:#555}.linea.envio{color:#2563eb}
+.linea.total{color:#111827;font-size:24px;font-weight:bold;padding-top:12px;border-top:1px solid #ddd}
+.envio-gratis{background:#dcfce7;color:#15803d;padding:10px;border-radius:8px;text-align:center;margin:12px 0;font-weight:bold}
+.aviso-envio{background:#fff7ed;color:#c2410c;padding:10px;border-radius:8px;margin:12px 0;font-size:14px}
+.comprar{width:100%;margin-top:16px;padding:14px;border:none;border-radius:8px;background:#16a34a;color:#fff;font-weight:bold;cursor:pointer}
+#fb{display:none;border:1px solid #7c3aed;background:#fff;color:#7c3aed;border-radius:8px;padding:9px 14px;cursor:pointer;font-weight:bold}
+@media(max-width:900px){.layout{grid-template-columns:1fr}aside{display:none;position:static}aside.on{display:block}#fb{display:inline-block}}
+@media(max-width:650px){header{flex-direction:column}nav{flex-wrap:wrap;justify-content:center}.sb{width:100%;max-width:none}.hero h1{font-size:42px}}
+.swrow{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 8px;align-items:center}
+.sw{width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #bbb;cursor:pointer;padding:0}
+.sw:hover{transform:scale(1.12)}.sw.on{box-shadow:0 0 0 2px #7c3aed}
+.sw.todos{width:auto;border-radius:14px;padding:0 10px;height:24px;background:#fff!important;font-size:12px;color:#333}
+.colorlinea{font-size:13px;color:#555;margin-top:4px;text-transform:capitalize}
+.tl{display:block;font-size:13px;color:#555;margin-bottom:6px}
+.tl select{width:auto;padding:5px 8px;font-size:13px;margin-left:4px}
+.carrito-info select.mini{width:auto;padding:3px 6px;font-size:13px;margin:0 8px 0 3px}
+.carrito-info .var{display:block;color:#555;font-size:13px;margin:4px 0;text-transform:capitalize}
+.destino{background:#f5f3ff;border-radius:12px;padding:14px;margin-bottom:14px}
+.destino h3{margin-bottom:10px;font-size:16px}
+.destino small{display:block;color:#777;font-size:12px;margin-top:8px}
+.dest-x{display:flex;gap:8px;margin-top:8px}
+.dest-x input{width:100%;padding:9px;border:1px solid #ccc;border-radius:8px;font-size:14px}
+.desglose{display:block;color:#777;font-size:12px;margin:2px 0 6px}
+.comprar:disabled{background:#aaa;cursor:not-allowed}
+.nota-img{display:block;color:#888;font-size:12px;margin-top:4px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(30px);background:#111827;color:#fff;padding:12px 18px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.3s;z-index:900;font-size:14px;max-width:92vw}
+#toast.on{opacity:1;transform:translateX(-50%);pointer-events:auto}
+#toast button{margin-left:10px;border:none;background:#7c3aed;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:bold}
+.envios{max-width:1350px;margin:0 auto 50px;padding:0 20px}
+.envios-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.envios-card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 5px 18px rgba(0,0,0,.08);line-height:1.5}
+.envios-card h3{margin-bottom:6px}.envios-card p{color:#555;font-size:14px;margin-bottom:6px}
+.dotc{position:absolute;right:10px;bottom:10px;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.4);z-index:2}
+.ubic{background:none;border:none;color:#fff;text-align:left;cursor:pointer;padding:4px 8px;border-radius:6px;line-height:1.25;font-family:inherit;white-space:nowrap}
+.ubic:hover{outline:1px solid #fff}.ubic small{display:block;color:#cbd5e1;font-size:12px}.ubic b{font-size:14px}
+.dest-line{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.link{background:none;border:none;color:#7c3aed;font-weight:bold;cursor:pointer;text-decoration:underline}
+.metodo,.pto{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid #ddd;border-radius:10px;padding:10px;margin-bottom:8px;cursor:pointer}
+.pto{margin-left:22px}.metodo span,.pto span{flex:1}.metodo small,.pto small{margin:2px 0 0!important}
+.dir{display:grid;gap:8px;margin-top:8px}.dir input{padding:9px;border:1px solid #ccc;border-radius:8px;font-size:14px;width:100%}
+@media(max-width:650px){.ubic{align-self:flex-start}}
+</style></head><body>
+<header>
+<div class="logo">🛍️ ModaNova</div>
+<button class="ubic" onclick="abrirUbic()" aria-label="Elegir ubicación"><small id="ubicTop">Hola</small><b id="ubicBot">Elige tu ubicación</b></button>
+<div class="sb"><form id="sf" autocomplete="off"><div class="iw"><input id="q" placeholder="Buscar playeras, jeans, marcas…" aria-label="Buscar" aria-autocomplete="list"><span id="gh" aria-hidden="true"></span></div><button class="lupa">🔍</button></form><div id="sug"></div></div>
+<nav><button onclick="irProductos()">Inicio</button><button id="cuentaBtn" onclick="abrirAuth()">Iniciar sesión</button>
+<button class="carrito-btn" onclick="abrirCarrito()">🛒 Carrito (<span id="cantidadCarrito">0</span>)</button></nav>
+</header>
+<section class="hero"><h1>ModaNova</h1><p>Descubre tu nuevo estilo</p><button onclick="irProductos()">Ver colección</button></section>
+<main id="productosSection">
+<div class="titulo"><h2>Nueva colección</h2><p>Prendas nacionales e importadas con envío a domicilio.</p></div>
+<div class="demo">Consultas del ejercicio:
+<button onclick="buscar('playera')">① Exacta: playera</button><button onclick="buscar('plyera')">② Con error: plyera</button><button onclick="buscar('xyzqw')">③ Sin resultados: xyzqw</button></div>
+<div class="layout"><aside id="as"></aside>
+<section><div class="barra"><div><button id="fb" onclick="document.getElementById('as').classList.toggle('on')">☰ Filtros</button> <strong id="cnt"></strong></div>
+<label>Ordenar: <select id="so" style="width:auto" onchange="S.sort=this.value;S.page=1;mostrarProductos()"><option value="rel">Relevancia</option><option value="pa">Precio: menor a mayor</option><option value="pd">Precio: mayor a menor</option><option value="rt">Mejor valorados</option><option value="of">Mayor descuento</option></select></label></div>
+<div id="corr"></div><div class="chips" id="chips"></div><div id="productos" class="productos"></div><div class="paginas" id="pag"></div></section></div>
+</main>
+<section class="envios" id="enviosInfo"></section>
+<footer><p>© 2026 ModaNova - Tienda de ropa</p></footer>
+
+<div id="authModal" class="modal-fondo"><div class="modal"><button class="cerrar" onclick="cerrarModal('authModal')">×</button><h2>👤 Mi cuenta</h2>
+<div class="tabs"><button id="loginTab" class="activo" onclick="cambiarModo('login')">Iniciar sesión</button><button id="registroTab" onclick="cambiarModo('registro')">Crear cuenta</button></div>
+<form onsubmit="autenticar(event)"><div class="campo"><label>Usuario</label><input type="text" id="usuario" placeholder="Escribe tu usuario" minlength="3" required></div>
+<div class="campo"><label>Contraseña</label><input type="password" id="password" placeholder="Escribe tu contraseña" minlength="4" required></div>
+<div id="mensajeAuth" class="mensaje"></div><button id="btnAuth" class="btn-submit">Iniciar sesión</button></form></div></div>
+
+<div id="resenasModal" class="modal-fondo"><div class="modal"><button class="cerrar" onclick="cerrarModal('resenasModal')">×</button><h2 id="tituloResenas">⭐ Reseñas</h2>
+<div id="resumenEstrellas" class="valoracion"></div><div id="listaResenas"></div>
+<hr style="margin:25px 0;border:none;border-top:1px solid #ddd"><h3>✍️ Escribe una reseña</h3><br>
+<form onsubmit="guardarResena(event)"><label>Tu valoración:</label>
+<div id="selectorEstrellas" class="selector-estrellas"><button type="button" onclick="selEstrellas(1)">★</button><button type="button" onclick="selEstrellas(2)">★</button><button type="button" onclick="selEstrellas(3)">★</button><button type="button" onclick="selEstrellas(4)">★</button><button type="button" onclick="selEstrellas(5)">★</button></div>
+<div class="campo"><label>Comentario</label><textarea id="textoResena" maxlength="300" placeholder="Cuéntanos qué te pareció este producto..." required></textarea></div>
+<div id="mensajeResena" class="mensaje"></div><button class="btn-submit">Publicar reseña</button></form></div></div>
+
+<div id="carritoModal" class="modal-fondo"><div class="modal"><button class="cerrar" onclick="cerrarModal('carritoModal')">×</button><h2>🛒 Mi carrito</h2>
+<div id="cuentaInfo" class="cuenta"></div><div id="carritoItems"></div><div id="resumenCompra" class="resumen"></div>
+<button class="comprar" id="btnComprar" onclick="finalizarCompra()">Finalizar compra</button></div></div>
+
+<div id="detalleModal" class="modal-fondo"><div class="modal"><button class="cerrar" onclick="cerrarModal('detalleModal')">×</button><div id="detalle"></div></div></div>
+
+<div id="ubicModal" class="modal-fondo"><div class="modal" style="max-width:480px"><button class="cerrar" onclick="cerrarModal('ubicModal')">×</button><h2>📍 Elige tu ubicación</h2>
+<p style="color:#555;margin-bottom:16px">Selecciona una ubicación para ver las opciones de entrega y su costo.</p>
+<div class="campo"><label>País</label><select id="ubPais" onchange="ubCambio()" style="padding:12px"></select></div>
+<div class="campo" id="ubCPbox"><label>Código postal en México</label><input id="ubCP" inputmode="numeric" maxlength="5" placeholder="Ej. 87000" onkeydown="if(event.key=='Enter')confirmarUbic()"></div>
+<div id="ubMsg" class="mensaje"></div><button class="btn-submit" onclick="confirmarUbic()">Confirmar</button></div></div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=id=>document.getElementById(id);
+const N=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const U="https://images.unsplash.com/";
+/* ===== 12 prendas originales (base) ===== */
+const B=[
+["Playera básica","Playera",299,15,0,"photo-1523381210434-271e8be1f52b","Playeras y tops","👕"],
+["Sudadera","Sudadera",649,8,1,"photo-1578681994506-b8f463449011","Sudaderas y hoodies","🧥"],
+["Jeans","Jeans",799,10,0,"photo-1541099649105-f69ad21f3246","Pantalones y shorts","👖"],
+["Chaqueta","Chaqueta",999,6,1,"photo-1551028719-00167b16eac5","Chaquetas y abrigos","🧥"],
+["Vestido","Vestido",699,7,0,"photo-1566174053879-31528523f8ae","Vestidos y faldas","👗"],
+["Falda","Falda",499,9,1,"photo-1583496661160-fb5886a13d27","Vestidos y faldas","👗"],
+["Pantalón cargo","Pantalón cargo",749,12,0,"photo-1515886657613-9f3515b0c78f","Pantalones y shorts","👖"],
+["Camisa","Camisa",599,11,1,"photo-1596755094514-f87e34085b2c","Playeras y tops","👔"],
+["Hoodie","Hoodie",699,5,0,"photo-1556821840-3a63f95609a7","Sudaderas y hoodies","🧥"],
+["Top Deportivo","Top deportivo",349,14,1,"photo-1538805060514-97d9cc17730c","Playeras y tops","🩱"],
+["Short Deportivo","Short deportivo",399,13,0,"photo-1591195853828-11db59a44f6b","Pantalones y shorts","🩳"],
+["Abrigo","Abrigo",1299,4,1,"photo-1539533113208-f5439d7c9a8f","Chaquetas y abrigos","🧥"]];
+const BR=["Nova","Urbano","Aztek","Lumen","Kappa","Orbe","Zenit","Brío"],CO=["negro","blanco","azul","gris","rojo","verde"],TA=["XS","S","M","L","XL"];
+const CATS=[...new Set(B.map(b=>b[6]))];
+let seed=11;const R=()=>(seed=seed*16807%2147483647)/2147483647;
+/* colores disponibles por prenda (generador independiente: no altera precios ni stock) */
+const ALLC=["negro","blanco","azul","gris","rojo","verde","beige","morado"],COL0=["blanco","gris","azul","negro","negro","negro","beige","blanco","negro","morado","azul","beige"];
+const PESO=[.2,.6,.7,.9,.4,.3,.7,.3,.6,.2,.2,1.2]; /* kg aproximados por tipo de prenda */
+let seed2=7;const R2=()=>(seed2=seed2*16807%2147483647)/2147483647;
+function colores(col){const pool=ALLC.filter(c=>c!=col),n=2+Math.floor(R2()*3),r=[col];while(r.length<=n&&pool.length)r.push(pool.splice(Math.floor(R2()*pool.length),1)[0]);return r}
+const productos=[];
+for(let i=0;i<500;i++){const b=B[i%12],v=Math.floor(i/12),o=v==0,marca=o?"ModaNova":BR[v%8],col=o?COL0[i%12]:CO[Math.floor(v/8)%6];
+const precio=o?b[2]:Math.round(b[2]*(.8+R()*.5)/10)*10-1,d=R()<.25?[10,15,20,30][Math.floor(R()*4)]:0;
+const ta=TA.filter(()=>R()<.7);if(ta.length<2)ta.push("M","L");
+productos.push({id:i+1,tipo:b[1],ti:i%12,color:col,colores:colores(col),orig:o,nombre:o?b[0]:`${b[1]} ${marca}`,marca,precio,antes:d?Math.round(precio/(1-d/100)):0,desc:d,
+stockInicial:o?b[3]:(R()<.05?0:Math.floor(R()*25)+2),importado:o?!!b[4]:R()<.4,imagen:U+b[5]+"?auto=format&fit=crop&w=700&q=80",
+cat:b[6],emoji:b[7],tallas:[...new Set(ta)],dias:Math.floor(R()*6)+1,rate:+(3+R()*2).toFixed(1),rev:Math.floor(R()*400)+3,
+texto:`${b[1]} de la marca ${marca}, disponible en varios colores. Tela cómoda y duradera, corte moderno, devolución gratis en 30 días.`});}
+/* ===== utilidades de texto / búsqueda ===== */
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const palabras=s=>N(s).split(/[^a-z0-9]+/).filter(Boolean);
+/* raíz simple: quita plural (s/es) y género (a/o/e) -> playeras=playera, negra=negro */
+const stem=w=>{w=N(w);if(w.length>4&&/[^aeiou]es$/.test(w))w=w.slice(0,-2);else if(w.length>3&&w.endsWith("s")&&!w.endsWith("ss"))w=w.slice(0,-1);if(w.length>4&&/[aeo]$/.test(w))w=w.slice(0,-1);return w};
+const SYN0={sudadera:["hoodie"],hoodie:["sudadera"],buzo:["sudadera","hoodie"],camiseta:["playera"],remera:["playera"],pantalon:["jeans"],blusa:["camisa"],bermuda:["short"],cazadora:["chaqueta"],saco:["chaqueta"]};
+const SYN=Object.fromEntries(Object.entries(SYN0).map(([k,v])=>[stem(k),v.map(stem)]));
+/* se busca SOLO en nombre, tipo y marca (ya no en la descripción genérica ni en la categoría) */
+productos.forEach(p=>{const ws=palabras(p.nombre+" "+p.tipo+" "+p.marca+" "+p.colores.join(" "));p.w=[...new Set(ws.map(stem))];p.wf=ws});
+const VOCF=[...new Set(productos.flatMap(p=>p.wf).filter(w=>w.length>2))],VOCS=[...new Set(VOCF.map(stem))];
+const ENVIO_GRATIS_DESDE=1500,LOCAL_KM=30;
+/* ===== almacenamiento ===== */
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let usuarios=ld("modanova_usuarios",{}),usuarioActual=null;try{usuarioActual=localStorage.getItem("modanova_usuarioActual")}catch(e){}
+let stock=ld("modanova3_stock",null);if(!stock){stock={};productos.forEach(p=>stock[p.id]=p.stockInicial);sv("modanova3_stock",stock)}
+let resenas=ld("modanova2_resenas",{});
+let invitado=ld("modanova3_invitado",{}),D=ld("modanova4_destino",{pais:"mx",cp:"",metodo:"casa",punto:"",dir:{}});const guardarInvitado=()=>sv("modanova3_invitado",invitado);D.dir=D.dir||{};
+const guardarUsuarios=()=>sv("modanova_usuarios",usuarios),guardarStock=()=>sv("modanova3_stock",stock),guardarResenas=()=>sv("modanova2_resenas",resenas);
+const dinero=v=>new Intl.NumberFormat("es-MX",{style:"currency",currency:"MXN"}).format(v);
+const generarEstrellas=c=>{let r="";for(let i=1;i<=5;i++)r+=i<=Math.round(c)?"★":"☆";return r};
+const P=id=>productos[id-1];
+function obtenerValoracion(p){const l=resenas[p.id]||[],s=l.reduce((t,r)=>t+r.estrellas,0),n=p.rev+l.length;return{promedio:(p.rate*p.rev+s)/n,cantidad:n}}
+/* ===== imágenes: foto para los 12 originales; ilustración propia (prenda + color real) para las variantes ===== */
+const COL={negro:"#2b2b30",blanco:"#f6f6f6",azul:"#3568b5",gris:"#9a9aa4",rojo:"#c43d3d",verde:"#3a8a5a",beige:"#d8c3a0",morado:"#8b5cf6"};
+const COLO=["#f6f6f6","#9a9aa4","#4a6fa5","#2b2b30","#2b2b30","#2b2b30","#d8c3a0","#f6f6f6","#2b2b30","#8b5cf6","#334155","#d8c3a0"];
+const SUD="M64 30 L88 22 Q100 40 112 22 L136 30 L176 124 L154 134 L138 92 L138 178 L62 178 L62 92 L46 134 L24 124 Z",JEA="M60 20 L140 20 L150 182 L108 182 L100 72 L92 182 L50 182 Z";
+const GAR=[
+{b:"M62 34 L86 24 Q100 42 114 24 L138 34 L174 70 L152 92 L138 78 L138 172 L62 172 L62 78 L48 92 L26 70 Z",l:"M86 24 Q100 46 114 24 M62 160 L138 160"},
+{b:SUD,l:"M88 22 Q100 46 112 22 M62 162 L138 162 M28 122 L50 132 M172 122 L150 132"},
+{b:JEA,l:"M60 34 L140 34 M100 34 L100 72 M64 38 Q76 60 92 42 M136 38 Q124 60 108 42 M54 168 L92 168 M108 168 L146 168"},
+{b:"M62 28 L84 20 L100 32 L116 20 L138 28 L176 124 L154 134 L138 90 L138 168 L62 168 L62 90 L46 134 L24 124 Z",l:"M100 32 L100 168 M84 20 L100 48 L116 20 M70 128 L90 128 M110 128 L130 128 M62 156 L138 156"},
+{b:"M80 20 L90 20 Q100 44 110 20 L120 20 L128 76 L116 88 L154 184 L46 184 L84 88 L72 76 Z",l:"M84 88 L116 88"},
+{b:"M64 46 L136 46 L160 174 L40 174 Z",l:"M65 62 L135 62 M84 62 L72 174 M100 62 L100 174 M116 62 L128 174"},
+{b:JEA,l:"M60 34 L140 34 M100 34 L100 72 M58 100 L80 100 L80 134 L56 134 Z M142 100 L120 100 L120 134 L144 134 Z"},
+{b:"M64 30 L88 22 L100 36 L112 22 L136 30 L176 124 L154 134 L138 92 L138 178 L62 178 L62 92 L46 134 L24 124 Z",l:"M88 22 L100 36 L92 48 Z M112 22 L100 36 L108 48 Z M100 36 L100 178",d:[[100,62],[100,86],[100,110],[100,134],[100,158]]},
+{h:"M80 28 Q76 2 100 2 Q124 2 120 28 Q112 48 100 50 Q88 48 80 28 Z",b:SUD,l:"M86 24 L100 50 L114 24 M94 50 L94 76 M106 50 L106 76 M78 130 L122 130 L128 160 L72 160 Z"},
+{b:"M72 28 L86 28 Q100 74 114 28 L128 28 L142 100 Q100 116 58 100 Z",l:"M60 90 Q100 106 140 90"},
+{b:"M58 44 L142 44 L154 138 L108 138 L100 84 L92 138 L46 138 Z",l:"M58 58 L142 58 M92 58 L88 78 M108 58 L112 78"},
+{b:"M62 26 L86 18 L100 32 L114 18 L138 26 L174 130 L152 140 L138 96 L138 188 L62 188 L62 96 L48 140 L26 130 Z",l:"M86 18 L100 70 L114 18 M62 122 L138 122 M94 80 L94 150 M106 80 L106 150",d:[[94,92],[94,116],[94,140],[106,92],[106,116],[106,140]]}];
+const svgCache={};
+function prendaSVG(p,col){const c=COL[col||p.color],k=p.ti+c;if(svgCache[k])return svgCache[k];
+const lum=(parseInt(c.slice(1,3),16)*.3+parseInt(c.slice(3,5),16)*.59+parseInt(c.slice(5,7),16)*.11)/255,l=lum<.4?"rgba(255,255,255,.4)":"rgba(0,0,0,.3)",g=GAR[p.ti],st=`stroke="rgba(0,0,0,.45)" stroke-width="2.5" stroke-linejoin="round"`;
+const s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5f3ff"/><stop offset="1" stop-color="#ddd6fe"/></linearGradient></defs><rect width="200" height="200" fill="url(#g)"/><ellipse cx="100" cy="192" rx="54" ry="5" fill="rgba(0,0,0,.13)"/>`+
+(g.h?`<path d="${g.h}" fill="${c}" ${st}/>`:"")+`<path d="${g.b}" fill="${c}" ${st}/><path d="${g.l}" fill="none" stroke="${l}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`+(g.d||[]).map(d=>`<circle cx="${d[0]}" cy="${d[1]}" r="2.4" fill="${l}"/>`).join("")+`</svg>`;
+return svgCache[k]="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s)}
+const SLUG=["playera","sudadera","jeans","chaqueta","vestido","falda","pantalon-cargo","camisa","hoodie","top-deportivo","short-deportivo","abrigo"];
+/* 1) foto local img/<prenda>-<color>.jpg  2) foto de Unsplash  3) ilustración */
+const imgSrc=(p,c)=>"img/"+SLUG[p.ti]+"-"+c+".jpg";
+const img=(p,c)=>`<img src="${imgSrc(p,c)}" alt="${esc(p.nombre+" "+c)}" loading="lazy" onerror="imgFail(this,${p.id},'${c}')">`;
+function imgFail(el,id,c){const p=P(id),e=+el.dataset.e||0;el.dataset.e=e+1;if(e==0)el.src=p.imagen;else{el.onerror=null;el.src=prendaSVG(p,c)}}
+/* ===== búsqueda con tolerancia a errores ===== */
+const S={q:"",corr:"",f:{cat:"",min:"",max:"",rate:0,imp:"",talla:"",color:"",rapido:false,stock:false},sort:"rel",page:1};
+const F0={...S.f};
+function lev(a,b){const m=[];for(let i=0;i<=a.length;i++)m[i]=[i];for(let j=1;j<=b.length;j++)m[0][j]=j;
+for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)m[i][j]=Math.min(m[i-1][j]+1,m[i][j-1]+1,m[i-1][j-1]+(a[i-1]==b[j-1]?0:1));return m[a.length][b.length]}
+function fix(t){const n=N(t);if(n.length<3||!/^[a-z]+$/.test(n))return t;const s=stem(n);if(VOCS.some(w=>w.startsWith(s)))return t;let best=t,bd=9;const mx=n.length>6?2:1;VOCF.forEach(w=>{const d=lev(n,w);if(d<bd&&d<=mx){bd=d;best=w}});return best}
+const toks=q=>palabras(q).map(stem);
+const alts=t=>[t,...(SYN[t]||[])];
+const casa=(t,p)=>alts(t).some(a=>p.w.some(w=>w.startsWith(a)));
+const hit=q=>{const T=toks(q);return T.length?productos.filter(p=>T.every(t=>casa(t,p))):productos.slice()};
+const puntaje=(p,T)=>T.reduce((s,t)=>{let m=0;alts(t).forEach(a=>p.w.forEach(w=>{if(w==a)m=Math.max(m,3);else if(w.startsWith(a))m=Math.max(m,1)}));return s+m},0)+(T.some(t=>alts(t).includes(p.w[0]))?2:0);
+function buscarBase(){const q=S.q.trim();let r=hit(q);S.corr="";
+if(q&&!r.length){const ps=palabras(q),c=ps.map(fix).join(" ");if(c!==ps.join(" ")){const r2=hit(c);if(r2.length){S.corr=c;r=r2}}}
+if(q&&S.sort=="rel"){const T=toks(S.corr||q);r=r.map(p=>[p,puntaje(p,T)]).sort((x,y)=>y[1]-x[1]||x[0].id-y[0].id).map(x=>x[0])}return r}
+function resaltar(s){const T=toks(S.corr||S.q);if(!T.length)return esc(s);return s.split(/([A-Za-zÀ-ÿ0-9]+)/).map((w,i)=>{if(i%2==0)return esc(w);const sw=stem(w);return T.some(t=>t.length>1&&alts(t).some(a=>sw.startsWith(a)))?`<mark>${esc(w)}</mark>`:esc(w)}).join("")}
+const filtrar=r=>{const f=S.f;return r.filter(p=>(!f.cat||p.cat==f.cat)&&(!f.min||p.precio>=+f.min)&&(!f.max||p.precio<=+f.max)&&obtenerValoracion(p).promedio>=f.rate&&(f.imp===""||p.importado==(f.imp=="1"))&&(!f.talla||p.tallas.includes(f.talla))&&(!f.rapido||p.dias<=3)&&(!f.stock||disp(p.id)>0)&&(!f.color||p.colores.includes(f.color)))};
+/* ===== mostrar productos ===== */
+function mostrarProductos(){
+const base=buscarBase(),res=filtrar(base),f=S.f,s=S.sort;
+res.sort((a,b)=>s=="pa"?a.precio-b.precio:s=="pd"?b.precio-a.precio:s=="rt"?obtenerValoracion(b).promedio-obtenerValoracion(a).promedio:s=="of"?b.desc-a.desc:0);
+const cc={};base.forEach(p=>cc[p.cat]=(cc[p.cat]||0)+1);
+$("as").innerHTML=`<h4>Categoría</h4><button class="cat ${f.cat?"":"on"}" onclick="setF('cat','')">Todas <span>${base.length}</span></button>`+CATS.map(c=>`<button class="cat ${f.cat==c?"on":""}" onclick="setF('cat','${c}')">${c} <span>${cc[c]||0}</span></button>`).join("")+
+`<h4>Precio (MXN)</h4><div class="rango"><input type="number" min="0" placeholder="Mín" value="${f.min}" onchange="setF('min',this.value)"><input type="number" min="0" placeholder="Máx" value="${f.max}" onchange="setF('max',this.value)"></div>
+<h4>Valoración</h4>${[4,3,0].map(n=>`<label><input type="radio" name="rt" ${f.rate==n?"checked":""} onchange="setF('rate',${n})"> ${n?`<span class="estrellas" style="font-size:15px">${generarEstrellas(n)}</span> y más`:"Cualquiera"}</label>`).join("")}
+<h4>Origen</h4><select onchange="setF('imp',this.value)"><option value="">Todos</option><option value="0" ${f.imp=="0"?"selected":""}>🇲🇽 Nacional</option><option value="1" ${f.imp=="1"?"selected":""}>🌎 Importado</option></select>
+<h4>Talla</h4><select onchange="setF('talla',this.value)"><option value="">Todas</option>${TA.map(t=>`<option ${f.talla==t?"selected":""}>${t}</option>`).join("")}</select>
+<h4>Color</h4><div class="swrow"><button class="sw todos ${f.color?"":"on"}" onclick="setF('color','')">Todos</button>${ALLC.map(c=>`<button class="sw ${f.color==c?"on":""}" style="background:${COL[c]}" title="${c}" aria-label="${c}" onclick="setF('color','${c}')"></button>`).join("")}</div>
+<h4>Disponibilidad</h4><label><input type="checkbox" ${f.rapido?"checked":""} onchange="setF('rapido',this.checked)"> 🚚 Entrega en 3 días o menos</label><label><input type="checkbox" ${f.stock?"checked":""} onchange="setF('stock',this.checked)"> Solo en stock</label>`;
+$("cnt").textContent=res.length+" resultado"+(res.length==1?"":"s")+(S.q?` para “${S.q}”`:"");
+const ch=[];if(S.q)ch.push(["q","Búsqueda: "+S.q]);if(f.cat)ch.push(["cat",f.cat]);if(f.min||f.max)ch.push(["pr",`${f.min?dinero(f.min):"$0"} – ${f.max?dinero(f.max):"∞"}`]);
+if(f.rate)ch.push(["rate",f.rate+"★ y más"]);if(f.imp!=="")ch.push(["imp",f.imp=="1"?"Importado":"Nacional"]);if(f.talla)ch.push(["talla","Talla "+f.talla]);if(f.color)ch.push(["color","Color "+f.color]);if(f.rapido)ch.push(["rapido","Entrega ≤3 días"]);if(f.stock)ch.push(["stock","En stock"]);
+$("chips").innerHTML=ch.map(c=>`<button class="chip" onclick="quitar('${c[0]}')">${esc(c[1])} ✕</button>`).join("")+(ch.length>1?`<button class="chip limpiar" onclick="quitar('all')">Limpiar todo</button>`:"");
+$("corr").innerHTML=S.corr?`<div class="correccion">Mostrando resultados para <strong>${esc(S.corr)}</strong>. No se encontró “${esc(S.q)}”.</div>`:"";
+actualizarContador();
+const cont=$("productos");
+if(!res.length){$("pag").innerHTML="";cont.style.display="block";
+cont.innerHTML=`<div class="sin-res"><div class="big">🔎</div><h2>No encontramos resultados${S.q?` para “${esc(S.q)}”`:""}</h2><p>${base.length?"Hay prendas que coinciden, pero tus filtros son muy estrictos.":"Revisa la ortografía o prueba con otra palabra."}</p>
+<ul><li>Usa palabras más generales (ej. “playera”, “jeans”)</li><li>Quita algunos filtros</li><li>Explora una categoría</li></ul>
+${ch.length?`<button class="agregar" style="width:auto;padding:12px 24px" onclick="quitar('all')">Quitar búsqueda y filtros</button><br><br>`:""}${CATS.map(c=>`<button class="chip" onclick="quitar('all');setF('cat','${c}')">${c}</button>`).join("")}</div>`;return}
+cont.style.display="";const per=24,pgs=Math.ceil(res.length/per);S.page=Math.min(S.page,pgs);cont.innerHTML="";
+res.slice((S.page-1)*per,S.page*per).forEach(p=>{const t=document.createElement("div");t.className="producto";t.dataset.id=p.id;t.innerHTML=cardHTML(p);cont.appendChild(t)});
+let g="";for(let i=1;i<=pgs;i++)g+=`<button class="${i==S.page?"on":""}" onclick="S.page=${i};mostrarProductos();irProductos()">${i}</button>`;$("pag").innerHTML=pgs>1?g:""}
+function setF(k,v){S.f[k]=v;if(k=="color"&&v)Object.keys(SEL).forEach(id=>{if(P(+id).colores.includes(v))SEL[id].c=v});S.page=1;mostrarProductos()}
+function quitar(x){if(x=="all"){S.f={...F0};S.q="";$("q").value=""}else if(x=="q"){S.q="";$("q").value=""}else if(x=="pr")S.f.min=S.f.max="";else S.f[x]=F0[x];S.page=1;mostrarProductos()}
+function buscar(q){S.q=String(q).trim().replace(/\s+/g," ");S.page=1;si=-1;gh("");$("q").value=S.q;$("sug").style.display="none";mostrarProductos();irProductos()}
+/* sugerencias */
+let si=-1;
+$("sf").onsubmit=e=>{e.preventDefault();buscar($("q").value)};
+/* ===== autocompletado mientras se escribe ===== */
+const DISP={};productos.forEach(p=>(p.nombre+" "+p.tipo+" "+p.marca+" "+p.colores.join(" ")).split(/\s+/).forEach(w=>{const k=N(w);if(k.length>2&&/^[a-z]+$/.test(k)&&!DISP[k])DISP[k]=w.toLowerCase()}));
+/* palabras que completan la que se está escribiendo, dentro de lo ya escrito (contexto) */
+function completar(ctx,tk){let base=productos,cu=ctx.trim();
+if(cu){base=hit(cu);if(!base.length){const c=palabras(cu).map(fix).join(" ");const b2=c?hit(c):[];if(b2.length){base=b2;cu=c}}}
+const cs=new Set(toks(cu)),tally={};
+base.forEach(p=>{const seen=new Set();p.wf.forEach(w=>{if(w.length<3||!w.startsWith(tk))return;const s=stem(w);if(cs.has(s)||seen.has(s))return;seen.add(s);const o=tally[s]||(tally[s]={n:0,f:{}});o.n++;o.f[w]=(o.f[w]||0)+1})});
+return{ctx:cu,list:Object.values(tally).map(o=>({w:Object.entries(o.f).sort((x,y)=>y[1]-x[1])[0][0],n:o.n})).sort((x,y)=>y.n-x.n||x.w.localeCompare(y.w))}}
+/* palabras parecidas a lo escrito (errores de ortografía a mitad de escritura) */
+function parecidas(tk){if(tk.length<4)return[];const mx=tk.length>6?2:1,seen=new Set(),r=[];
+VOCF.map(w=>({w,d:Math.min(lev(tk,w.slice(0,tk.length-1)),lev(tk,w.slice(0,tk.length)),lev(tk,w.slice(0,tk.length+1)))})).filter(x=>x.d<=mx).sort((x,y)=>x.d-y.d).forEach(x=>{const s=stem(x.w);if(!seen.has(s)){seen.add(s);r.push(x.w)}});return r.slice(0,4)}
+/* texto "fantasma" dentro de la barra: se acepta con Tab o → */
+let GH=null;
+function gh(typed,rest,full){GH=rest?full:null;$("gh").innerHTML=rest?`<span style="visibility:hidden">${esc(typed)}</span>${esc(rest)}`:""}
+$("q").oninput=()=>{const inp=$("q"),raw=inp.value,b=$("sug");si=-1;const v=raw.replace(/\s+/g," ").replace(/^ /,"");
+if(!v.trim()){b.style.display="none";gh("");return}
+const fin=/ $/.test(v),ps=v.trim().split(" "),tkRaw=fin?"":ps[ps.length-1],tk=N(tkRaw),ctxRaw=(fin?ps:ps.slice(0,-1)).join(" ");
+const it=[],seen=new Set(),add=o=>{const k=N(o.t);if(it.length>=8||seen.has(k))return;seen.add(k);it.push(o)};
+const cnt=n=>n+" resultado"+(n==1?"":"s");
+/* 1) completar la palabra en curso (o proponer la siguiente si terminó con espacio) */
+const cm=completar(ctxRaw,tk),pre=cm.ctx?cm.ctx+" ":"";
+cm.list.slice(0,5).forEach(c=>add({t:pre+(DISP[c.w]||c.w),l:cnt(c.n),w:1}));
+/* 2) categorías */
+if(v.trim().length>=2)CATS.forEach(c=>{if(N(c).includes(N(v.trim()))&&it.filter(o=>o.c).length<2)add({t:c,l:"categoría",c:1})});
+/* 3) prenda + lo escrito (ej. "negro" → "Playera negro"), solo si la palabra ya está completa */
+if(!fin&&VOCF.includes(tk)){const g={};hit(v).forEach(p=>g[p.tipo]=(g[p.tipo]||0)+1);const tv=palabras(v);
+Object.entries(g).sort((x,y)=>y[1]-x[1]).forEach(([tipo,n])=>{const ts=palabras(tipo).map(stem),resto=tv.filter(w=>!alts(stem(w)).some(a=>ts.some(s=>s.startsWith(a))));add({t:(tipo+" "+resto.join(" ")).trim(),l:cnt(n)})})}
+/* 4) si nada coincide: palabras parecidas */
+if(!it.length&&tk.length>=4)parecidas(tk).forEach(w=>{const t=pre+(DISP[w]||w);if(hit(t).length)add({t,l:"¿Quisiste decir?"})});
+b.innerHTML=it.length?it.map(o=>{const ok=o.w&&N(o.t).startsWith(N(v));const show=ok?`${esc(o.t.slice(0,v.length))}<b>${esc(o.t.slice(v.length))}</b>`:esc(o.t);return`<div data-v="${esc(o.t)}" data-c="${o.c?1:""}">${show}<small>${esc(o.l)}</small></div>`}).join(""):`<div style="cursor:default"><small>Sin sugerencias para “${esc(v.trim())}”</small></div>`;
+b.style.display="block";
+const top=it.find(o=>o.w&&N(o.t).startsWith(N(v))&&o.t.length>v.length);
+if(top&&raw===v&&inp.selectionStart==raw.length)gh(raw,top.t.slice(raw.length),top.t);else gh("")};
+$("q").onfocus=()=>{if($("q").value.trim())$("q").oninput()};
+$("q").onblur=()=>gh("");
+$("q").onkeydown=e=>{const sg=$("sug"),inp=$("q"),vis=sg.style.display=="block",it=vis?[...sg.querySelectorAll("[data-v]")]:[];
+if(e.key=="Escape"){sg.style.display="none";si=-1;gh("");return}
+if(e.key=="Tab"&&!e.shiftKey&&si>-1&&it[si]){e.preventDefault();inp.value=it[si].dataset.v;inp.oninput();return}
+if((e.key=="Tab"&&!e.shiftKey||e.key=="ArrowRight")&&GH&&inp.selectionStart==inp.value.length&&inp.selectionEnd==inp.value.length){e.preventDefault();inp.value=GH;inp.oninput();return}
+if(!it.length)return;
+if(e.key=="ArrowDown"||e.key=="ArrowUp"){e.preventDefault();si=e.key=="ArrowDown"?(si+1)%it.length:(si<=0?it.length-1:si-1);it.forEach((x,i)=>x.classList.toggle("on",i==si))}
+else if(e.key=="Enter"&&si>-1&&it[si]){e.preventDefault();it[si].click()}};
+$("sug").onclick=e=>{const d=e.target.closest("[data-v]");if(!d)return;if(d.dataset.c){S.f.cat=d.dataset.v;buscar("")}else buscar(d.dataset.v)};
+document.addEventListener("click",e=>{if(!e.target.closest(".sb")){$("sug").style.display="none";gh("")}});
+/* ===== autenticación ===== */
+let modoAuth="login";
+const abrirAuth=m=>{$("authModal").classList.add("activo");const e=$("mensajeAuth"),t=typeof m=="string";e.className="mensaje"+(t?" error":"");e.textContent=t?m:""},cerrarModal=id=>{$(id).classList.remove("activo");if(id=="detalleModal")detalleId=null;if(id=="authModal")pendienteCompra=false};
+function cambiarModo(m){modoAuth=m;$("loginTab").classList.toggle("activo",m=="login");$("registroTab").classList.toggle("activo",m=="registro");$("btnAuth").textContent=m=="login"?"Iniciar sesión":"Crear cuenta";$("mensajeAuth").textContent=""}
+function autenticar(e){e.preventDefault();const u=$("usuario").value.trim(),pw=$("password").value,m=$("mensajeAuth");
+if(modoAuth=="registro"){if(usuarios[u]){m.className="mensaje error";m.textContent="❌ Ese usuario ya existe.";return}usuarios[u]={password:pw,carrito:{}};guardarUsuarios();m.className="mensaje exito";m.textContent="✅ Cuenta creada correctamente."}
+else if(!usuarios[u]||usuarios[u].password!==pw){m.className="mensaje error";m.textContent="❌ Usuario o contraseña incorrectos.";return}
+usuarioActual=u;fusionarInvitado();try{localStorage.setItem("modanova_usuarioActual",u)}catch(x){}
+const ir=pendienteCompra;setTimeout(()=>{cerrarModal("authModal");if(ir)abrirCarrito()},modoAuth=="registro"?600:0);actualizarCuenta();mostrarProductos()}
+function actualizarCuenta(){const b=$("cuentaBtn");if(usuarioActual){b.textContent="👤 "+usuarioActual+" · Cerrar sesión";b.onclick=cerrarSesion}else{b.textContent="Iniciar sesión";b.onclick=abrirAuth}}
+function cerrarSesion(){usuarioActual=null;try{localStorage.removeItem("modanova_usuarioActual")}catch(e){}actualizarCuenta();mostrarProductos()}
+function comprobarLogin(msg){if(!usuarioActual){abrirAuth(msg||"🔒 Inicia sesión o crea una cuenta.");return false}return true}
+/* ===== variantes: color y talla ===== */
+const SEL={};let detalleId=null,pendienteCompra=false;
+function sel(p){return SEL[p.id]||(SEL[p.id]={c:S.f.color&&p.colores.includes(S.f.color)?S.f.color:p.color,t:S.f.talla&&p.tallas.includes(S.f.talla)?S.f.talla:p.tallas[0]})}
+function opcionesHTML(p){const s=sel(p);
+return `<div class="colorlinea">Color: <strong>${resaltar(s.c)}</strong></div><div class="swrow">${p.colores.map(c=>`<button type="button" class="sw ${c==s.c?"on":""}" style="background:${COL[c]}" title="${c}" aria-label="Color ${c}" onclick="elegirColor(${p.id},'${c}')"></button>`).join("")}</div>
+<label class="tl">Talla: <select aria-label="Talla" onchange="elegirTalla(${p.id},this.value)">${p.tallas.map(t=>`<option ${t==s.t?"selected":""}>${t}</option>`).join("")}</select></label>`}
+function elegirColor(id,c){sel(P(id)).c=c;refrescar(id)}
+function elegirTalla(id,t){sel(P(id)).t=t;refrescar(id)}
+function refrescar(id){const el=document.querySelector('.producto[data-id="'+id+'"]');if(el)el.innerHTML=cardHTML(P(id));if(detalleId===id)detalle(id)}
+function cardHTML(p){const s=sel(p),c=disp(p.id),v=obtenerValoracion(p),sin=stock[p.id]===0;
+const ts=sin?"Agotado":c===0?"Todo el stock está en tu carrito":c<=3?"⚠️ Últimas unidades: "+c:"Disponibles: "+c,tc=sin?"agotado":c<=3?"stock-bajo":"";
+return `<div class="imagen-producto" onclick="detalle(${p.id})">${p.desc?`<span class="oferta">-${p.desc}%</span>`:""}${p.emoji}${img(p,s.c)}<span class="dotc" style="background:${COL[s.c]}" title="Color ${s.c}"></span></div>
+<div class="info-producto"><h3 onclick="detalle(${p.id})">${resaltar(p.nombre)}</h3><div class="marca">Marca: ${p.marca} · ${p.cat}</div>
+<div class="precio">${dinero(p.precio)}${p.antes?`<s>${dinero(p.antes)}</s>`:""}</div>
+<span class="origen ${p.importado?"importado":"nacional"}">${p.importado?"🌎 Importado":"🇲🇽 Nacional"}</span>
+<div class="opciones">${opcionesHTML(p)}</div>
+<div class="entrega">🚚 Sale en ${p.dias} día${p.dias>1?"s":""} · envío según tu destino</div>
+<div class="valoracion"><span class="estrellas">${generarEstrellas(v.promedio)}</span><span class="promedio">${v.promedio.toFixed(1)} / 5 · ${v.cantidad} reseñas</span></div>
+<div class="stock ${tc}">${ts}</div>
+<button class="agregar" onclick="agregarCarrito(${p.id})" ${c===0?"disabled":""}>${sin?"Agotado":c===0?"Todo en tu carrito":"Agregar al carrito"}</button>
+<button class="btn-resenas" onclick="abrirResenas(${p.id})">⭐ Ver reseñas</button></div>`}
+
+/* ===== carrito: funciona SIN iniciar sesión (invitado) y se fusiona al entrar ===== */
+/* clave de cada línea: idProducto|color|talla */
+const carro=()=>usuarioActual&&usuarios[usuarioActual]?usuarios[usuarioActual].carrito:invitado;
+const guardarCarro=()=>usuarioActual?guardarUsuarios():guardarInvitado();
+const kClave=(id,c,t)=>id+"|"+c+"|"+t;
+const kParse=k=>{const[a,c,t]=String(k).split("|"),p=P(+a);return{p,id:+a,c:c||p.color,t:t||p.tallas[0]}};
+const enCarro=id=>Object.entries(carro()).reduce((s,[k,q])=>s+(+k.split("|")[0]==id?q:0),0);
+/* el stock ya no se "reserva" al agregar: se descuenta al comprar (como en Amazon/Mercado Libre) */
+const disp=id=>Math.max(0,stock[id]-enCarro(id));
+const totalCarro=()=>Object.values(carro()).reduce((a,b)=>a+b,0);
+const actualizarContador=()=>{$("cantidadCarrito").textContent=totalCarro()};
+function fusionarInvitado(){const g=Object.entries(invitado);if(!g.length)return;const c=usuarios[usuarioActual].carrito;g.forEach(([k,q])=>c[k]=(c[k]||0)+q);invitado={};guardarUsuarios();guardarInvitado()}
+let tt;function aviso(m,ver){const t=$("toast");t.innerHTML=esc(m)+(ver?' <button onclick="abrirCarrito()">Ver carrito</button>':"");t.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("on"),3500)}
+function agregarCarrito(id){const p=P(id),s=sel(p);if(disp(id)<=0){aviso("No quedan más unidades disponibles de este producto.");return}
+const c=carro(),k=kClave(id,s.c,s.t);c[k]=(c[k]||0)+1;guardarCarro();refrescar(id);actualizarContador();if($("carritoModal").classList.contains("activo"))mostrarCarrito();
+aviso("✅ "+p.nombre+" ("+s.c+", "+s.t+") agregado",true)}
+function cambiarCantidad(k,d){const c=carro(),{id}=kParse(k);if(!c[k])return;if(d>0){if(disp(id)<=0){aviso("No quedan más unidades disponibles.");return}c[k]++}else{if(c[k]<=1)delete c[k];else c[k]--}guardarCarro();refrescar(id);actualizarContador();mostrarCarrito()}
+function eliminarProducto(k){const c=carro(),{id}=kParse(k);delete c[k];guardarCarro();refrescar(id);actualizarContador();mostrarCarrito()}
+/* cambiar el color o la talla de algo que ya está en el carrito */
+function cambiarVariante(k,campo,val){const c=carro(),{id,c:col,t}=kParse(k),q=c[k];if(!q)return;const nk=campo=="c"?kClave(id,val,t):kClave(id,col,val);if(nk==k)return;delete c[k];c[nk]=(c[nk]||0)+q;guardarCarro();mostrarCarrito()}
+function abrirCarrito(){$("carritoModal").classList.add("activo");mostrarCarrito()}
+
+/* ===== envío: país (+ código postal en México). La distancia la calcula el sistema ===== */
+const PAISES={mx:{n:"México",f:"🇲🇽"},us:{n:"Estados Unidos",f:"🇺🇸",km:1500},ca:{n:"Canadá",f:"🇨🇦",km:3200},gt:{n:"Guatemala",f:"🇬🇹",km:1900},co:{n:"Colombia",f:"🇨🇴",km:3300},pe:{n:"Perú",f:"🇵🇪",km:4700},cl:{n:"Chile",f:"🇨🇱",km:7600},ar:{n:"Argentina",f:"🇦🇷",km:7900},es:{n:"España",f:"🇪🇸",km:9300}};
+/* distancia aproximada por carretera desde Cd. Victoria según los 2 primeros dígitos del código postal */
+const ESTADOS=[[1,16,"Ciudad de México",700],[20,20,"Aguascalientes",770],[21,23,"Baja California",2900],[24,24,"Campeche",1700],[25,27,"Coahuila",600],[28,28,"Colima",1250],[29,30,"Chiapas",1700],[31,33,"Chihuahua",1300],[34,35,"Durango",1000],[36,38,"Guanajuato",650],[39,41,"Guerrero",1100],[42,43,"Hidalgo",580],[44,49,"Jalisco",1000],[50,57,"Estado de México",700],[58,61,"Michoacán",900],[62,62,"Morelos",750],[63,63,"Nayarit",1300],[64,67,"Nuevo León",340],[68,71,"Oaxaca",1300],[72,75,"Puebla",800],[76,76,"Querétaro",600],[77,77,"Quintana Roo",2100],[78,79,"San Luis Potosí",400],[80,82,"Sinaloa",1500],[83,85,"Sonora",1800],[86,86,"Tabasco",1400],[87,87,"Tamaulipas",330],[88,88,"Tamaulipas",430],[89,89,"Tamaulipas",240],[90,90,"Tlaxcala",780],[91,96,"Veracruz",780],[97,97,"Yucatán",2000],[98,99,"Zacatecas",700]];
+function zonaCP(cp){if(!/^\d{5}$/.test(cp))return null;const n=+cp;if(n>=87000&&n<=87199)return{lugar:"Ciudad Victoria",km:8};const p=+cp.slice(0,2),e=ESTADOS.find(x=>p>=x[0]&&p<=x[1]);return e?{lugar:e[2],km:e[3]}:null}
+const destInfo=()=>{if(D.pais!="mx"){const c=PAISES[D.pais]||PAISES.us;return{ok:true,n:c.n,lugar:c.n,km:c.km,pais:D.pais}}const cp=String(D.cp||"").trim(),z=zonaCP(cp);return z?{ok:true,n:"CP "+cp+" ("+z.lugar+")",lugar:z.lugar,km:z.km,pais:"mx"}:{ok:false,pais:"mx",n:"México"}};
+const tarifaNac=km=>km<=150?89:km<=400?119:km<=800?149:km<=1500?189:239;
+/* puntos de recogida (simulados): tienda propia solo en Cd. Victoria; casilleros y tiendas asociadas en cualquier lugar de México */
+const puntosDisp=d=>{if(!d.ok||d.pais!="mx")return[];const l=d.lugar,r=[{id:"c",n:"Casillero inteligente · "+l,tipo:"Casillero"},{id:"s",n:"Tienda de conveniencia asociada · "+l,tipo:"Tienda asociada"}];return l=="Ciudad Victoria"?[{id:"t",n:"Tienda ModaNova · Centro de Cd. Victoria",tipo:"Retiro en tienda",gratis:true},...r]:r};
+const puntoSel=d=>{const p=puntosDisp(d);return p.find(x=>x.id==D.punto)||p[0]||null};
+function calcEnvio(sub,kg){const d=destInfo(),kgx=Math.ceil(kg),gr=sub>=ENVIO_GRATIS_DESDE;
+if(!d.ok)return{ok:false,zona:"",txt:"Elige tu ubicación (arriba, en “Actualizar ubicación”) para calcular el envío."};
+const km=Math.ceil(d.km);
+if(d.pais!="mx"){const m=Math.round(350+km*.12)+Math.max(0,kgx-1)*80;return{ok:true,zona:"Internacional · "+d.lugar,km,monto:m,dias:[7+Math.floor(km/1500),12+Math.floor(km/1000)],aplicaGratis:false,txt:`Envío internacional: $350 base + $0.12 por km (${km.toLocaleString("es-MX")} km) + $80 por kg arriba de 1 kg (${kgx} kg). No incluye aranceles ni impuestos de importación del país destino.`}}
+let m,z,dias,txt;
+if(km<=LOCAL_KM){m=49+Math.max(0,km-3)*8;z="Entrega local";dias=[1,2];txt=`Entrega local: $49 los primeros 3 km + $8 por cada km adicional (${km} km).`}
+else{m=tarifaNac(km)+Math.max(0,kgx-3)*15;z="Paquetería nacional";dias=[2+Math.floor(km/600),4+Math.floor(km/600)];txt=`Paquetería nacional por zona de distancia (${km} km) + $15 por kg arriba de 3 kg (${kgx} kg).`}
+const pt=D.metodo=="punto"?puntoSel(d):null;
+if(pt){if(kgx>5)return{ok:false,zona:"Recoger en punto",txt:"Los puntos de recogida aceptan pedidos de hasta 5 kg (el tuyo pesa "+kgx+" kg). Elige entrega a domicilio."};
+const n=pt.gratis?0:Math.max(29,Math.round(m*.6));
+return{ok:true,zona:"Recoger · "+pt.tipo,km:null,monto:pt.gratis||gr?0:n,normal:n,dias,aplicaGratis:!pt.gratis,msgGratis:pt.gratis?"🏬 Retiro en tienda sin costo":null,pt,txt:pt.gratis?"Retiro en nuestra tienda, sin costo. Te avisamos cuando esté listo y tienes 3 días para recogerlo con tu código.":"Entrega en punto de recogida: 40% más barato que a domicilio (mínimo $29). Te avisamos cuando llegue y tienes 3 días para recogerlo con tu código."}}
+return{ok:true,zona:z,km,monto:gr?0:m,normal:m,dias,aplicaGratis:true,txt}}
+function guardarD(){sv("modanova4_destino",D)}
+function setMetodo(m){D.metodo=m;guardarD();mostrarCarrito()}
+function setPunto(id){D.punto=id;guardarD();mostrarCarrito()}
+function setDir(k,v){D.dir[k]=v.trim();guardarD()}
+/* ===== "Elige tu ubicación" (como Amazon) ===== */
+function actualizarUbic(){const d=destInfo();$("ubicTop").textContent=d.ok?"Entrega en "+(D.pais=="mx"?d.lugar+" "+D.cp:d.n):"Hola";$("ubicBot").textContent=d.ok?"Actualizar ubicación":"Elige tu ubicación"}
+function abrirUbic(){$("ubPais").innerHTML=Object.entries(PAISES).map(([k,c])=>`<option value="${k}" ${D.pais==k?"selected":""}>${c.f} ${c.n}</option>`).join("");$("ubCP").value=D.cp||"";$("ubMsg").textContent="";ubCambio();$("ubicModal").classList.add("activo")}
+function ubCambio(){$("ubCPbox").style.display=$("ubPais").value=="mx"?"block":"none"}
+function confirmarUbic(){const p=$("ubPais").value,m=$("ubMsg");if(p=="mx"){const cp=$("ubCP").value.trim();if(!zonaCP(cp)){m.className="mensaje error";m.textContent="❌ Escribe un código postal válido de México (5 dígitos).";return}D.cp=cp}
+D.pais=p;if(p!="mx")D.metodo="casa";guardarD();cerrarModal("ubicModal");actualizarUbic();if($("carritoModal").classList.contains("activo"))mostrarCarrito();aviso("📍 Ubicación actualizada")}
+
+function mostrarCarrito(){const co=$("carritoItems"),re=$("resumenCompra"),el=Object.entries(carro());
+$("cuentaInfo").innerHTML=usuarioActual?"👤 Cuenta activa: <strong>"+esc(usuarioActual)+"</strong>":"🛍️ Estás navegando como <strong>invitado</strong>. Tu carrito se guarda en este dispositivo; solo te pediremos iniciar sesión al finalizar la compra.";
+$("btnComprar").textContent=usuarioActual?"Finalizar compra":"Iniciar sesión para comprar";
+if(!el.length){co.innerHTML='<div class="vacio">🛒 Tu carrito está vacío.</div>';re.innerHTML="";$("btnComprar").disabled=true;return}
+let sub=0,kg=0,prep=0;co.innerHTML="";
+el.forEach(([k,q])=>{const{p,c,t}=kParse(k),tot=p.precio*q;sub+=tot;kg+=PESO[p.ti]*q;prep=Math.max(prep,p.dias);
+const d=document.createElement("div");d.className="carrito-item";
+d.innerHTML=`<div class="carrito-icono">${p.emoji}${img(p,c)}</div><div class="carrito-info"><strong>${p.nombre}</strong>
+<span class="var">Color <select class="mini" onchange="cambiarVariante('${k}','c',this.value)">${p.colores.map(x=>`<option ${x==c?"selected":""}>${x}</option>`).join("")}</select>Talla <select class="mini" onchange="cambiarVariante('${k}','t',this.value)">${p.tallas.map(x=>`<option ${x==t?"selected":""}>${x}</option>`).join("")}</select></span>
+<small>${dinero(p.precio)} cada uno · ${p.importado?"🌎 Importado":"🇲🇽 Nacional"}</small>
+<div class="cantidad"><button onclick="cambiarCantidad('${k}',-1)">−</button><span>${q}</span><button onclick="cambiarCantidad('${k}',1)" ${disp(p.id)<=0?"disabled":""}>+</button></div><button class="eliminar" onclick="eliminarProducto('${k}')">Eliminar</button></div><strong>${dinero(tot)}</strong>`;co.appendChild(d)});
+const e=calcEnvio(sub,kg);
+const d=destInfo(),pts=puntosDisp(d),modoPunto=d.ok&&d.pais=="mx"&&D.metodo=="punto",ps=modoPunto?puntoSel(d):null;
+let h=`<div class="destino"><h3>📍 Enviar a</h3><div class="dest-line"><span>${d.ok?"<strong>"+esc(D.pais=="mx"?d.lugar+" · CP "+D.cp:d.n)+"</strong>":"Aún no eliges tu ubicación"}</span><button class="link" onclick="abrirUbic()">${d.ok?"Cambiar":"Elegir ubicación"}</button></div>`;
+if(d.ok&&d.pais=="mx"){h+=`<label class="metodo"><input type="radio" name="met" ${modoPunto?"":"checked"} onchange="setMetodo('casa')"> 🏠 <span><strong>A domicilio</strong><small>Te lo llevamos a tu puerta</small></span></label><label class="metodo"><input type="radio" name="met" ${modoPunto?"checked":""} onchange="setMetodo('punto')"> 🏬 <span><strong>Recoger en un punto</strong><small>Tienda, casillero o tienda asociada · más barato</small></span></label>`;
+if(modoPunto)h+=pts.map(p=>`<label class="pto"><input type="radio" name="pt" ${p.id==ps.id?"checked":""} onchange="setPunto('${p.id}')"><span><strong>${esc(p.n)}</strong><small>${p.tipo}${p.gratis?" · sin costo":""}</small></span></label>`).join("")+`<small>Puntos de ejemplo (simulación). Te avisamos cuando tu pedido llegue y tienes 3 días para recogerlo con tu código. Hasta 5 kg.</small>`}
+else if(d.ok)h+=`<small>Envíos internacionales: solo entrega a domicilio.</small>`;
+if(d.ok&&!modoPunto){const a=D.dir||{};h+=`<div class="dir"><input placeholder="Calle y número" value="${esc(a.calle||"")}" onchange="setDir('calle',this.value)"><input placeholder="Colonia / ciudad y referencias" value="${esc(a.col||"")}" onchange="setDir('col',this.value)"><input placeholder="Teléfono de contacto" value="${esc(a.tel||"")}" onchange="setDir('tel',this.value)"></div>`}
+h+=`<small>Calculamos la distancia desde nuestra tienda en Cd. Victoria, Tamps. ¿Tu país no aparece? Escríbenos para cotizar.</small></div>`;
+if(!e.ok)h+=`<div class="aviso-envio">⚠️ ${e.txt}</div>`;
+else if(e.aplicaGratis)h+=e.monto===0?`<div class="envio-gratis">${e.msgGratis||"🚚 ¡Tienes envío GRATIS!"}</div>`:`<div class="aviso-envio">🚚 Envío gratis en entrega local y nacional desde ${dinero(ENVIO_GRATIS_DESDE)}.<br>Te faltan <strong>${dinero(ENVIO_GRATIS_DESDE-sub)}</strong>.</div>`;
+h+=`<div class="linea"><span>Subtotal:</span><strong>${dinero(sub)}</strong></div><div class="linea envio"><span>🚚 Envío${e.ok?" ("+e.zona+(e.km!=null?", "+e.km+" km":"")+")":""}:</span><strong>${!e.ok?"Por calcular":e.monto===0?(e.normal?`<s style="color:#999;font-weight:normal">${dinero(e.normal)}</s> `:"")+"GRATIS":dinero(e.monto)}</strong></div>`;
+if(e.ok)h+=`<small class="desglose">${e.txt}</small><small class="desglose">📦 Llegada estimada: ${e.dias[0]+prep}–${e.dias[1]+prep} días hábiles (incluye ${prep} día${prep>1?"s":""} de preparación)</small>`;
+h+=`<div class="linea total"><span>Total${e.ok?"":" (sin envío)"}:</span><strong>${dinero(sub+(e.ok?e.monto:0))}</strong></div>`;
+re.innerHTML=h;$("btnComprar").disabled=!e.ok}
+
+/* el login se pide SOLO aquí, al comprar */
+function finalizarCompra(){const el=Object.entries(carro());if(!el.length){aviso("🛒 Tu carrito está vacío.");return}
+if(!usuarioActual){pendienteCompra=true;cerrarModal("carritoModal");abrirAuth("🔒 Para finalizar tu compra inicia sesión o crea una cuenta. Tu carrito se conserva.");return}
+let sub=0,kg=0,prep=0;const por={};el.forEach(([k,q])=>{const{p}=kParse(k);sub+=p.precio*q;kg+=PESO[p.ti]*q;prep=Math.max(prep,p.dias);por[p.id]=(por[p.id]||0)+q});
+const e=calcEnvio(sub,kg);if(!e.ok){alert(e.txt);return}
+if(!e.pt){const a=D.dir||{};if(!a.calle||!a.col){alert("Completa tu dirección de entrega (calle y número, y colonia) en el carrito.");return}}
+for(const id in por)if(por[id]>stock[id]){alert("Solo quedan "+stock[id]+" unidad(es) de "+P(+id).nombre+". Ajusta tu carrito.");return}
+const tot=sub+e.monto,d=destInfo();
+if(!confirm("¿Confirmas tu compra?\n\nSubtotal: "+dinero(sub)+"\n"+(e.pt?"Recoger en "+e.pt.n:"Envío a "+(D.dir.calle||"")+", "+(D.dir.col||"")+", "+d.n)+": "+(e.monto?dinero(e.monto):"GRATIS")+"\nTotal: "+dinero(tot)))return;
+for(const id in por)stock[id]-=por[id];guardarStock();usuarios[usuarioActual].carrito={};guardarUsuarios();
+alert("✅ ¡Compra realizada correctamente!\n\n"+(e.pt?"Te avisaremos cuando llegue a "+e.pt.n+". Tendrás 3 días para recogerlo con tu código: MN-"+Math.floor(100000+Math.random()*900000)+"\n\n":"")+"Llegada estimada: "+(e.dias[0]+prep)+"–"+(e.dias[1]+prep)+" días hábiles.");
+mostrarProductos();mostrarCarrito()}
+
+/* ===== detalle ===== */
+function detalle(id){const p=P(id),v=obtenerValoracion(p),c=disp(id),s=sel(p);detalleId=id;
+$("detalle").innerHTML=`<div class="imagen-producto" style="height:280px;border-radius:12px;cursor:default">${p.emoji}${img(p,s.c)}<span class="dotc" style="background:${COL[s.c]}" title="Color ${s.c}"></span></div><small class="nota-img">Foto de referencia de la prenda; el color elegido se muestra en el círculo.</small><h2 style="margin:16px 0 6px">${p.nombre}</h2>
+<div class="estrellas">${generarEstrellas(v.promedio)} <span class="promedio">${v.promedio.toFixed(1)} · ${v.cantidad} reseñas</span></div>
+<div class="precio" style="margin:8px 0">${dinero(p.precio)}${p.antes?`<s>${dinero(p.antes)}</s>`:""}</div>
+<p style="line-height:1.5;margin-bottom:10px">${p.texto}</p>
+<div class="opciones" style="margin:10px 0">${opcionesHTML(p)}</div>
+<p style="color:#666;font-size:14px;line-height:1.7">Categoría: ${p.cat}<br>Marca: ${p.marca} · ${p.importado?"🌎 Importado":"🇲🇽 Nacional"}<br>🚚 Sale en ${p.dias} día(s) · Envío: local desde $49, nacional desde $89, internacional desde $350 (se calcula según tu destino en el carrito)<br>Disponibles: ${c}</p>
+<button class="agregar" style="margin-top:16px" onclick="agregarCarrito(${id})" ${c?"":"disabled"}>${c?"Agregar al carrito":"Sin unidades disponibles"}</button>`;$("detalleModal").classList.add("activo")}
+function renderEnvios(){$("enviosInfo").innerHTML=`<div class="titulo"><h2>🚚 Cómo calculamos tu envío</h2><p>Tienda en Ciudad Victoria, Tamaulipas · el costo depende de la distancia y el peso</p></div><div class="envios-grid">
+<div class="envios-card"><h3>📍 Entrega local</h3><p>Código postal de Cd. Victoria y alrededores</p><p><strong>$49</strong> los primeros 3 km + <strong>$8</strong> por cada km adicional. Llega en 1–2 días.</p></div>
+<div class="envios-card"><h3>🇲🇽 Todo México</h3><p>Paquetería por zonas de distancia</p><p>Desde <strong>$89</strong> hasta <strong>$239</strong> según los km, + $15 por kg arriba de 3 kg. Llega en 2–7 días.</p></div>
+<div class="envios-card"><h3>🌎 Internacional</h3><p>EE. UU., Canadá, Guatemala, Colombia, Perú, Chile, Argentina y España</p><p><strong>$350</strong> base + <strong>$0.12</strong> por km + $80 por kg extra. Llega en 7–20 días. No incluye aranceles.</p></div>
+<div class="envios-card"><h3>🏬 Recoge en un punto</h3><p>Tienda, casilleros y tiendas asociadas en México</p><p>En nuestra tienda de Cd. Victoria: <strong>sin costo</strong>. En otros puntos: <strong>40% más barato</strong> que a domicilio. Tienes 3 días para recogerlo con tu código. Hasta 5 kg.</p></div></div>
+<p class="demo" style="margin-top:14px">Envío GRATIS en entrega local y nacional desde ${dinero(ENVIO_GRATIS_DESDE)}.</p>`}
+document.addEventListener("keydown",e=>{if(e.key=="Escape")["authModal","carritoModal","resenasModal","detalleModal","ubicModal"].forEach(cerrarModal)});
+/* ===== reseñas ===== */
+let prodRes=null,estSel=0;
+function abrirResenas(id){prodRes=id;estSel=0;$("tituloResenas").textContent="⭐ Reseñas de "+P(id).nombre;$("resenasModal").classList.add("activo");$("textoResena").value="";$("mensajeResena").textContent="";selEstrellas(0);mostrarResenas(id)}
+function selEstrellas(n){estSel=n;document.querySelectorAll("#selectorEstrellas button").forEach((b,i)=>b.classList.toggle("seleccionada",i<n))}
+const escaparHTML=t=>{const d=document.createElement("div");d.textContent=t;return d.innerHTML};
+function mostrarResenas(id){const l=resenas[id]||[],v=obtenerValoracion(P(id)),li=$("listaResenas");
+$("resumenEstrellas").innerHTML=`<div style="text-align:center"><div class="estrellas" style="font-size:30px">${generarEstrellas(v.promedio)}</div><strong style="font-size:22px">${v.promedio.toFixed(1)} / 5</strong><p>Basado en ${v.cantidad} reseñas</p></div>`;
+if(!l.length){li.innerHTML='<div class="sin-resenas">Aún no hay comentarios. ¡Sé el primero en escribir uno! ⭐</div>';return}
+li.innerHTML="";l.slice().reverse().forEach(r=>{const d=document.createElement("div");d.className="resena";
+d.innerHTML=`<div class="resena-cabecera"><span class="resena-usuario">👤 ${escaparHTML(r.usuario)}</span><span class="resena-fecha">${new Date(r.fecha).toLocaleDateString("es-MX")}</span></div><div class="resena-estrellas">${generarEstrellas(r.estrellas)}</div><div class="resena-texto">${escaparHTML(r.comentario)}</div>`+
+(usuarioActual&&r.usuario===usuarioActual?`<button class="eliminar-resena" onclick="eliminarResena(${id},${l.indexOf(r)})">🗑️ Eliminar mi reseña</button>`:"");li.appendChild(d)})}
+function guardarResena(e){e.preventDefault();if(!comprobarLogin("🔒 Inicia sesión para escribir una reseña."))return;const m=$("mensajeResena");
+if(!estSel){m.className="mensaje error";m.textContent="⭐ Selecciona una valoración.";return}
+const c=$("textoResena").value.trim();if(!c){m.className="mensaje error";m.textContent="📝 Escribe un comentario.";return}
+resenas[prodRes]=resenas[prodRes]||[];if(resenas[prodRes].some(r=>r.usuario===usuarioActual)){m.className="mensaje error";m.textContent="❌ Ya has reseñado este producto.";return}
+resenas[prodRes].push({usuario:usuarioActual,estrellas:estSel,comentario:c,fecha:new Date().toISOString()});guardarResenas();m.className="mensaje exito";m.textContent="✅ ¡Reseña publicada!";$("textoResena").value="";selEstrellas(0);mostrarResenas(prodRes);mostrarProductos()}
+function eliminarResena(id,i){const l=resenas[id];if(!usuarioActual||!l||!l[i]||l[i].usuario!==usuarioActual)return;if(!confirm("¿Quieres eliminar tu reseña?"))return;l.splice(i,1);if(!l.length)delete resenas[id];guardarResenas();mostrarResenas(id);mostrarProductos()}
+const irProductos=()=>$("productosSection").scrollIntoView({behavior:"smooth"});
+["authModal","carritoModal","resenasModal","detalleModal","ubicModal"].forEach(id=>$(id).addEventListener("click",function(e){if(e.target===this)cerrarModal(id)}));
+if(usuarioActual&&!usuarios[usuarioActual])usuarioActual=null;
+mostrarProductos();actualizarCuenta();renderEnvios();actualizarUbic();if(!ld("modanova4_ubicVista",false)&&!destInfo().ok){sv("modanova4_ubicVista",true);setTimeout(abrirUbic,500)}
+</script></body></html>
